@@ -5,7 +5,10 @@ export class StringUtils {
     if (ObjectUtils.isNullOrUndefined(s)) {
       return null;
     }
-    return s + '';
+    if(typeof s === 'string') {
+      return s;
+    }
+    return JSON.stringify(s);
   };
   public static capitalisedFirst = (s: string) => {
     if (ObjectUtils.isEmpty(s)) return s;
