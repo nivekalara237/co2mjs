@@ -24,7 +24,7 @@ const config = {
         '<rootDir>/src/**/*.ts',
         '<rootDir>/tests/**/*.{ts|js|cjs}'
     ],
-    testPathIgnorePatherns: ['<rootDir>/node_modules'],
+    testPathIgnorePatterns: ['<rootDir>/node_modules'],
     coverageReporters: ['json','html'],
     testMatch: ['<rootDir>/tests/**/*.spec.ts','<rootDir>/tests/**/*.test.ts']
 }
