@@ -44,6 +44,7 @@ export class ObjectUtils {
   }
 
   public static appendDefined<T>(obj: T, childKey: string, childValue: any) {
+    if (this.isNullOrUndefined(obj)) return undefined;
     if (
       this.isNullOrUndefined(childValue) ||
       this.isNullOrUndefined(childKey)
@@ -63,17 +64,14 @@ export class ObjectUtils {
         break;
       case 'function':
       case 'symbol':
-      case 'undefined':
-        value = childValue;
-        break;
-      case 'object':
-        value = JSON.stringify(childValue);
-        break;
       case 'string':
-        value = `"${childValue}"`;
-        break;
+      case 'object':
+      case 'undefined':
+        obj[childKey] = value;
+        return obj;
       default:
         value = childValue;
+        break
     }
     return Object.assign(<object>obj, JSON.parse(`{"${childKey}":${childValue}}`));
   }
@@ -122,7 +120,7 @@ export class ObjectUtils {
   };
 
   public static isObject = (object: any) => {
-    return object != null && typeof object === 'object';
+    return object != null && !Array.isArray(object) && typeof object === 'object';
   };
 
   public static isNotEmpty<T>(obj: T): boolean {
