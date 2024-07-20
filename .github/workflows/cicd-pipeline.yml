@@ -81,4 +81,4 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run Tests Command (Jest-CI)
-        run: "coming soon"
+        run: echo 'coming soon'
