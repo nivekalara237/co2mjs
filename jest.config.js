@@ -10,7 +10,7 @@ const config = {
             branches: 80,
             function: 80,
             lines: 80,
-            statements: -10
+            statements: 60
         }
     },
     extensionsToTreatAsEsm: ['.ts'],

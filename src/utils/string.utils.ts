@@ -8,11 +8,16 @@ export class StringUtils {
     if(typeof s === 'string') {
       return s;
     }
+    if (typeof s === "bigint") {
+      return s.toString()
+    }
     return JSON.stringify(s);
   };
   public static capitalisedFirst = (s: string) => {
-    if (ObjectUtils.isEmpty(s)) return s;
-    if (ObjectUtils.size(s) === 1) return s.toUpperCase();
+    if (this.isEmpty(s)) return s;
+    if (ObjectUtils.size(this.trimLetf(s)) === 1)
+      return this.trimLetf(s).toUpperCase();
+    s = this.trimLetf(s);
     return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   };
 
@@ -20,12 +25,29 @@ export class StringUtils {
     return str1.concat(...[str2, ...moreStrArgs]);
   }
 
-  public static trim(str: string) {
-    return ObjectUtils.isNullOrUndefined(str) ? str : str.trim();
+  public static trim(str: string, char?: string) {
+    if (ObjectUtils.isNullOrUndefined(str)) {
+      return str;
+    }
+    if (ObjectUtils.isNullOrUndefined(char)) {
+      return str.trim();
+    }
+    const strLeftTrimmed = this.trimLetf(str, char);
+    return this.trimRight(strLeftTrimmed, char);
   }
 
-  public static trimLetf(str: string) {
-    return ObjectUtils.isNullOrUndefined(str) ? str : str.trimStart();
+  public static trimLetf(str: string, char?: string) {
+    if (ObjectUtils.isNullOrUndefined(str)) {
+      return str;
+    } else if (ObjectUtils.isNullOrUndefined(char)) {
+      return str.trimStart();
+    } else {
+      if (str.startsWith(<string>char)) {
+        return this.trimLetf(str.substring(1, str.length), char);
+      } else {
+        return str;
+      }
+    }
   }
 
   public static trimRight(str: string, char?: string): string {
@@ -34,7 +56,6 @@ export class StringUtils {
     } else if (ObjectUtils.isNullOrUndefined(char)) {
       return str.trimEnd();
     } else {
-      str = str.trimEnd();
       if (str.endsWith(<string>char)) {
         return this.trimRight(str.substring(0, str.length - 1), char);
       } else {

@@ -31,7 +31,7 @@ export class StringBuilder {
   }
 
   public isEmpty() {
-    return this.arr.map(StringUtils.trim).join('').length === 0;
+    return this.arr.map(value => StringUtils.trim(value)).join('').length === 0;
   }
 
   public toString(): string {
