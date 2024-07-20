@@ -63,22 +63,21 @@ jobs:
         run: npm ci
       - name: Run Tests Command (Jest-CI)
         run: npm run test:jest
-
-  deploy-lib-npm:
-    name: Deploy library on npmjs.org
-    needs:
-      - tests
-      - buildDist
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Use Node.js 18x to run Tests
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18.x
-          cache: "npm"
-      - name: Install Dependencies
-        run: npm ci
-      - name: Run Tests Command (Jest-CI)
-        run: "coming soon"
+deploy-lib-npm:
+  name: Deploy library on npmjs.org
+  needs:
+    - tests
+    - buildDist
+  runs-on: ubuntu-22.04
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Use Node.js 18x to run Tests
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18.x
+        cache: "npm"
+    - name: Install Dependencies
+      run: npm ci
+    - name: Run Tests Command (Jest-CI)
+      run: "coming soon"
