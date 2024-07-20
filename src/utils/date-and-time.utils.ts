@@ -7,10 +7,11 @@ export class DateAndTimeUtils {
     if (ObjectUtils.isNullOrUndefined(duree)) {
       return duree;
     }
-    const timeArr = duree.split(':');
-    if (timeArr.length < 3) {
+    const regex = new RegExp("^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$","g");
+    if (!regex.test(duree)) {
       return '';
     }
+    const timeArr = duree.split(':');
     const h = +timeArr[0] * (60 * 60);
     const m = +timeArr[1] * 60;
     const s = +timeArr[2];

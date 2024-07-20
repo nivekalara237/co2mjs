@@ -14,7 +14,7 @@ const config = {
         }
     },
     extensionsToTreatAsEsm: ['.ts'],
-    forceCoverageMatch: ['**/*.spec.ts','**/*.spec.js','**/*.test.ts','**/*.test.js'],
+    // forceCoverageMatch: ['**/*.spec.ts','**/*.spec.js','**/*.test.ts','**/*.test.js'],
     modulePaths: ['<rootDir>/src'],
     notify: true,
     preset: 'ts-jest',
@@ -22,7 +22,7 @@ const config = {
     coverageDirectory: "<rootDir>/coverage",
     collectCoverageFrom: [
         '<rootDir>/src/**/*.ts',
-        '<rootDir>/tests/**/*.{ts|js|cjs}'
+        // '<rootDir>/tests/**/*.{ts|js|cjs}'
     ],
     testPathIgnorePatterns: ['<rootDir>/node_modules'],
     coverageReporters: ['json','html'],

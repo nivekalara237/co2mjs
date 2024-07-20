@@ -7,7 +7,7 @@
   "scripts": {
     "test": "test:jest",
     "build": "tsc",
-    "test:jest": "jest --watch --passWithNoTests --updateSnapshot --coverage"
+    "test:jest": "jest --colors --ci --updateSnapshot --coverage"
   },
   "keywords": [],
   "author": "",
