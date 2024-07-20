@@ -1,13 +1,13 @@
 name: Build, Lint, Test and Deploy co2m.js
 
-on:
-  push:
-    branches:
-      - "master"
-  pull_request:
-    branches:
-      - "master"
-
+#on:
+#  push:
+#    branches:
+#      - "master"
+#  pull_request:
+#    branches:
+#      - "master"
+on: push
 jobs:
   eslint:
     name: Check Syntax with ESLint
