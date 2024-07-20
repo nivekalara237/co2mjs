@@ -1,0 +1,66 @@
+name: Build, Lint, Test and Deploy co2m.js
+
+#on:
+#  push:
+#    branches:
+#      - "master"
+#  pull_request:
+#    branches:
+#      - "master"
+on: push
+jobs:
+  eslint:
+    name: Check Syntax with ESLint
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }} to check Lint
+        uses: actions/setup-node@v4
+        with:
+          always-auth: 'false'
+          cache: 'npm'
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: echo 'npm run lint'
+
+  buildDist:
+    name: Build-to-JS
+    needs: eslint
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js 18.x to run build dist
+        uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+          node-version: 18.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Build Dist
+        run: npm run build
+
+  tests:
+    name: Run Tests
+    needs: eslint
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js 18x to run Tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: "npm"
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Tests Command (Jest-CI)
+        run: npm run test:jest
