@@ -1,9 +1,15 @@
-
-/** @type {import("tes-jest").JestConfigWithTsJest} */
-const { defaults } = require("jest-config");
+import { defaults } from "jest-config";
 
 const config = {
     verbose: true,
+    transform: {
+        '^.+\\.tsx?$': [
+            'ts-jest',
+            {
+                useESM: true,
+            },
+        ],
+    },
     moduleFileExtensions: [ ...defaults.moduleFileExtensions, 'mts','cts' ],
     coverageThreshold: {
         global: {
@@ -29,4 +35,4 @@ const config = {
     testMatch: ['<rootDir>/tests/**/*.spec.ts','<rootDir>/tests/**/*.test.ts']
 }
 
-module.exports = config;
+export default config;
