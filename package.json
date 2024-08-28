@@ -1,14 +1,27 @@
 {
   "name": "co2m.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "prettier": {
+    "trailingComma": "es5"
+  },
+  "importSort": {
+    ".js, .ts": {
+      "stype": "renke"
+    }
+  },
   "lint-staged": {
     "*.[tj]s": [
-      "./node_modules/prettier/bin/prettier.cjs --tab-width 2 --write ./src",
-      "git add"
+      "import-sort-cli --write",
+      "prettier --write"
     ]
   },
   "scripts": {
@@ -58,6 +71,8 @@
     "eslint": "^9.9.1",
     "globals": "^15.9.0",
     "husky": "^9.1.5",
+    "import-sort-cli": "^2.4.0",
+    "import-sort-style-renke": "^6.0.0",
     "jest": "^29.7.0",
     "jest-config": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
