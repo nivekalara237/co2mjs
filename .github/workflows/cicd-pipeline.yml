@@ -117,10 +117,9 @@ jobs:
           git add package.json
           git commit -m "Patching version to $next_version"
           git push origin master
-      - name: Publish to npm
+          cd dist && npm publish
         with:
           path: dist
           name: dist-artifact
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
-        run: cd dist && npm publish
