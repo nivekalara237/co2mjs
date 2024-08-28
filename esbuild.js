@@ -1,7 +1,8 @@
 import esbuild from "esbuild";
-import {nodeExternalsPlugin} from "esbuild-node-externals";
+import { nodeExternalsPlugin } from "esbuild-node-externals";
 
-esbuild.build({
+esbuild
+  .build({
     entryPoints: ["./src/index.ts"],
     outfile: "dist/index.min.js",
     sourcemap: "inline",
@@ -11,5 +12,6 @@ esbuild.build({
     platform: "node",
     format: "iife",
     target: "node14",
-    plugins: [nodeExternalsPlugin()]
-}).catch(() => process.exit(0));
+    plugins: [nodeExternalsPlugin()],
+  })
+  .catch(() => process.exit(0));
