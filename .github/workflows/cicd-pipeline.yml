@@ -1,5 +1,4 @@
 name: Build, Lint, Test and Deploy co2m.js
-
 #on:
 #  push:
 #    branches:
@@ -27,11 +26,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run ESLint
-        run: npx run lint
+        run: npm run lint
 
   buildDist:
     name: Build-to-JS
-    needs: eslint
+    needs: [eslint, tests]
     runs-on: ubuntu-22.04
     strategy:
       matrix:
