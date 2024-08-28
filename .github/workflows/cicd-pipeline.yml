@@ -58,6 +58,8 @@ jobs:
         run: npm ci
       - name: Run Build Dist
         run: npm run build
+      - name: Upload Dist Artifact
+        uses: actions/upload-artifact@v4
         with:
           path: dist
           name: dist-artifact
@@ -98,6 +100,11 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
           node-version: 18.x
           cache: "npm"
+      - name: Download Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifact
+          path: dist
       - name: Install Dependencies
         run: npm ci
       - name: Update package.json - patching version
