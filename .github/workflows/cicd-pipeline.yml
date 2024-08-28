@@ -94,20 +94,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Download Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifact
+          path: dist
       - name: Use Node.js 18x to run Tests
         uses: actions/setup-node@v4
         with:
           registry-url: 'https://registry.npmjs.org/'
           node-version: 18.x
           cache: "npm"
-      - name: Download Dist Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-artifact
-          path: dist
       - name: Install Dependencies
         run: npm ci
       - name: Update package.json - patching version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
         run: |
           curr_version=$(jq -r .version < package.json)
           echo "The current version is $curr_version"
@@ -118,8 +120,3 @@ jobs:
           git commit -m "Patching version to $next_version"
           git push origin master
           cd dist && npm publish
-        with:
-          path: dist
-          name: dist-artifact
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
