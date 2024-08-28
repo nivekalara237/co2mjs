@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [18.x] #, 20.x, 22.x
     steps:
       - name: Checkout code style
         uses: actions/checkout@v4
@@ -42,10 +42,10 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [18.x] #, 20.x, 22.x
         arch:
           - x64
-          - x86
+          # - x86
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -58,14 +58,16 @@ jobs:
         run: npm ci
       - name: Run Build Dist
         run: npm run build
-
+        with:
+          path: dist
+          name: dist-artifact
   tests:
     name: Run Tests
     needs: eslint
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [18.x] #, 20.x, 22.x
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -86,13 +88,14 @@ jobs:
       - tests
       - buildDist
     runs-on: ubuntu-22.04
-    if: github.event.pull_request == true && github.event.pull_request.base.ref == 'maste'
+    if: github.event.pull_request == true && github.event.pull_request.base.ref == 'master'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js 18x to run Tests
         uses: actions/setup-node@v4
         with:
+          registry-url: 'https://registry.npmjs.org/'
           node-version: 18.x
           cache: "npm"
       - name: Install Dependencies
@@ -108,12 +111,9 @@ jobs:
           git commit -m "Patching version to $next_version"
           git push origin master
       - name: Publish to npm
+        with:
+          path: dist
+          name: dist-artifact
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
-        run: npm publish
-#      - name: Create Github Release
-#        if: startsWith(github.red, 'ref/tags/')
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          files: |
-#            dist/*.tgz
+        run: cd dist && npm publish

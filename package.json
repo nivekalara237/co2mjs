@@ -2,8 +2,8 @@
   "name": "co2m.js",
   "version": "1.0.2",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "type": "module",
   "husky": {
     "hooks": {
@@ -26,6 +26,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
+    "prepublish": "npm run build",
     "test": "jest --colors --ci --updateSnapshot --coverage",
     "test:jest": "jest --colors --ci --updateSnapshot --coverage",
     "jest:clear": "jest --clear cache --colors --ci --notity",
@@ -33,21 +34,30 @@
     "clean": "rm -rf coverage; rm -rf dist || exit 0",
     "deleteModules": "rm -rf node_modules",
     "dev": "node ./tasks/dev.js",
-    "build": "node ./tasks/build.js",
+    "build": "node ./tasks/build.js --trace",
     "lint": "eslint"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
     }
   },
   "keywords": [
     "JavaScript",
     "Common",
     "JS",
-    "Utilities"
+    "Typescript",
+    "Utilities",
+    "Objects",
+    "Math",
+    "Boolean",
+    "String",
+    "Number",
+    "Random",
+    "utils",
+    "Throwable"
   ],
   "homepage": "co2m-js.nivekaa.com",
   "bugs": {
@@ -68,6 +78,9 @@
     "@types/node": "^20.14.9",
     "esbuild": "^0.23.1",
     "esbuild-node-externals": "^1.14.0",
+    "esbuild-plugin-copy": "^2.1.1",
+    "esbuild-plugin-text-replace": "^1.3.0",
+    "esbuild-plugin-write-file": "^0.0.4",
     "eslint": "^9.9.1",
     "globals": "^15.9.0",
     "husky": "^9.1.5",
