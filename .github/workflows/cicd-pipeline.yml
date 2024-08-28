@@ -6,7 +6,15 @@ name: Build, Lint, Test and Deploy co2m.js
 #  pull_request:
 #    branches:
 #      - "master"
-on: push
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
 jobs:
   eslint:
     name: Check Syntax with ESLint
@@ -72,12 +80,13 @@ jobs:
       - name: Run Tests Command (Jest-CI)
         run: npm test
 
-  deploy-lib-npm:
-    name: Deploy library on npmjs.org
+  publish-lib-npmjs:
+    name: Deploy library on npmjs.com
     needs:
       - tests
       - buildDist
     runs-on: ubuntu-22.04
+    if: github.event.pull_request == true && github.event.pull_request.base.ref == 'maste'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -88,5 +97,23 @@ jobs:
           cache: "npm"
       - name: Install Dependencies
         run: npm ci
-      - name: Run Tests Command (Jest-CI)
-        run: echo 'coming soon'
+      - name: Update package.json - patching version
+        run: |
+          curr_version=$(jq -r .version < package.json)
+          echo "The current version is $curr_version"
+          npm version patch
+          next_version=$(jq -r .version < package.json)
+          echo "The next version is $next_version"
+          git add package.json
+          git commit -m "Patching version to $next_version"
+          git push origin master
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
+        run: npm publish
+#      - name: Create Github Release
+#        if: startsWith(github.red, 'ref/tags/')
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: |
+#            dist/*.tgz
