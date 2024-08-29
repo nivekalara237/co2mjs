@@ -10,7 +10,29 @@ on:
       - closed
     branches:
       - master
+# Later, in the jobs section of your actions.yml file.
 jobs:
+  if_merged:
+    if: github.event.pull_request.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "The PR was successfully merged."
+
+  if_merge_closed:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "The PR was successfully merged."
+
+  if_event_name_pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "The PR was successfully merged."
+
   eslint:
     name: Check Syntax with ESLint
     runs-on: ubuntu-22.04
