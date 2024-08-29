@@ -51,11 +51,11 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Download Dist Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-artifact
-          path: dist
+#      - name: Download Dist Artifact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: dist-artifact
+#          path: dist
       - name: Use Node.js 18x to run Tests
         uses: actions/setup-node@v4
         with:
@@ -65,8 +65,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm ci
-          echo '${{ github.event.pull_request.base.ref}} - ${{ github.event_name }} - ${{ github.ref }} - ${{ github.base_ref }} - ${{ github.actor.name }} - ${{ github.event.action }} - ${{ github.event.pull_request.merge }}'
-
+          npm run build
       - name: Update package.json - patching version
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
