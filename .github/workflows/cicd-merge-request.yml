@@ -70,6 +70,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
         run: |
+          git pull --rebase origin master
           git config --local user.name "github-actions[bot]"
           git config --local user.email "33054249+nivekalara237@users.noreply.github.com"
           curr_version=$(jq -r .version < package.json)
@@ -78,8 +79,19 @@ jobs:
           echo "*****The next version is $next_version*****"
           git add .
           git commit -m "Patching version to $next_version"
-      - name: Push the version change
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
+      - name: Push changes
+        env:
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+          PAT: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Automated commit"
+          git push "https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:master
+#      - name: Push the version change
+#        uses: ad-m/github-push-action@master
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          branch: master
