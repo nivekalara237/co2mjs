@@ -30,9 +30,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          fetch-depth: 0
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
