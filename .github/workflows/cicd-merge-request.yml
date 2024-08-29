@@ -1,0 +1,33 @@
+name: "Pipeline to path version"
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  MR_if-merged:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    steps:
+      - name: "run test"
+        run: echo "MR merged"
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "The PR was successfully merged."
+
+  if_merge_closed:
+    if: github.event.pull_request.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "if_merge_closed"
+
+  if_event_name_pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "if_event_name_pr"
