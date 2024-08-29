@@ -1,7 +1,8 @@
 # co2m.js
 ___
-🚦 Build Status
+##### 🚦 Build Status
 ![co2m.js workflow](https://github.com/nivekalara237/co2mjs/actions/workflows/cicd-pipeline.yml/badge.svg?branch=master)
+
 ![co2m.js workflow](https://github.com/nivekalara237/co2mjs/actions/workflows/release.yml/badge.svg?branch=master)
 ___
 
@@ -56,7 +57,7 @@ const formattedString = StringUtils.leftPad("1", "0", 3);
 // ==> '0001'
 ```
 
-License
+##### License
 This project is licensed under the Apache License 2.0.
 
 You are free to use, modify, and distribute this software in accordance with the terms of the license. For more details, please refer to the LICENSE file included in the repository.
