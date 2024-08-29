@@ -2,14 +2,14 @@ name: "Release new version"
 on:
   push:
     tags:
-      - "v*"
+      - "**"
 
 permissions:
   contents: write
 
 jobs:
   release:
-    name: Release co2mjs@${{ inputs.version }}
+    name: Release co2mjs
     runs-on: ubuntu-latest
     steps:
       - name: Create release
