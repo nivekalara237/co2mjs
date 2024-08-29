@@ -14,6 +14,7 @@ jobs:
       - name: Create release
         env:
           TAG_NAME: ${{ github.ref_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "$TAG_NAME" \
              --repo="$GITHUB_REPOSITORY" \
@@ -25,6 +26,7 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     name: "Publish the new version to the npmjs"
     runs-on: ubuntu-22.04
+    needs: release
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -37,13 +39,14 @@ jobs:
           cache: "npm"
           node-version: 18.x
           architecture: x64
+          registry-url: 'https://registry.npmjs.org'
       - name: Run NPM Install
         run: npm ci
       - name: Run Build
         run: npm run build
       - name: Publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd dist
           npm publish
