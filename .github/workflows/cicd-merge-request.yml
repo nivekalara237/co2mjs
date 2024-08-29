@@ -71,7 +71,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
         run: |
           git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "33054249+nivekalara237@users.noreply.github.com"
           curr_version=$(jq -r .version < package.json)
           echo "*****The current version is $curr_version*****"
           next_version=$(npm version patch --no-commit-hooks --no-git-tag-version)
