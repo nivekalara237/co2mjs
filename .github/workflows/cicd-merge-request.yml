@@ -1,6 +1,9 @@
 name: "Pipeline to path version"
 on:
-  push:
+  pull_request:
+    types:
+      - closed
+      - opened
     branches:
       - master
 
@@ -20,6 +23,13 @@ jobs:
 
   if_merge_closed:
     if: github.event.pull_request.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "if_merge_closed"
+
+  if_merge_open:
+    if: github.event.pull_request.action == 'opened'
     runs-on: ubuntu-latest
     steps:
       - run: |
