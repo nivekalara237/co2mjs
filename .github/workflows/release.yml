@@ -2,7 +2,9 @@ name: "Release new version"
 on:
   push:
     tags:
+      - *
       - "**"
+      - v*
 
 permissions:
   contents: write
@@ -20,3 +22,29 @@ jobs:
              --repo="$GITHUB_REPOSITORY" \
              --title="${TAG_NAME#v}" \
              --generate-notes
+
+  publish-npm:
+    name: "Publish the new version to the npmjs"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+          node-version: 18.x
+          architecture: x64
+      - name: Run NPM Install
+        run: npm ci
+      - name: Run Build
+        run: npm run build
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
+        run: |
+          cd dist
+          npm publish
