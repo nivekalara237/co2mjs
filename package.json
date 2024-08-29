@@ -34,7 +34,7 @@
     "clean": "rm -rf coverage; rm -rf dist || exit 0",
     "deleteModules": "rm -rf node_modules",
     "dev": "node ./tasks/dev.js",
-    "build": "node ./tasks/build.js --trace",
+    "build": "node ./tasks/build.js",
     "lint": "eslint"
   },
   "exports": {
@@ -95,6 +95,7 @@
     "prettier": "^3.3.3",
     "ts-jest": "^29.1.5",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^8.3.0"
+    "typescript-eslint": "^8.3.0",
+    "yargs-parser": ">=5.0.1"
   }
 }
