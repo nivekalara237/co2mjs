@@ -1,11 +1,4 @@
 name: Build, Lint, Test and Deploy co2m.js
-#on:
-#  push:
-#    branches:
-#      - "master"
-#  pull_request:
-#    branches:
-#      - "master"
 env:
   ENABLED_RUN: ${{ github.event_name == 'push' && github.actor.name != 'github-actions[bot]' }}
 on:
@@ -90,14 +83,14 @@ jobs:
         run: npm test
 
   publish-lib-npmjs:
-    if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
+    # if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
     name: Deploy library on npmjs.com
     needs:
       - tests
       - buildDist
     runs-on: ubuntu-22.04
     # if: startsWith(github.ref, 'refs/tags/v') && github.ref_name == github.ref_name && github.event.ref.startsWith('refs/tags/')
-    # if: github.event.pull_request == true && github.event.pull_request.base.ref == 'master'
+    if: github.event.pull_request == true && github.event.pull_request.base.ref == 'master'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -123,11 +116,12 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printenv
           curr_version=$(jq -r .version < package.json)
           echo "*****The current version is $curr_version*****"
-          next_version=$(npm version patch)
+          next_version=$(npm version patch --no-commit-hooks --no-git-tag-version)
           echo "*****The next version is $next_version*****"
-          git add package.json
+          git add .
           git commit -m "Patching version to $next_version"
       - name: Push the version change
         uses: ad-m/github-push-action@master
