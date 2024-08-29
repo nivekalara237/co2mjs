@@ -2,8 +2,6 @@ name: "Release new version"
 on:
   push:
     tags:
-      - *
-      - "**"
       - v*
 
 permissions:
