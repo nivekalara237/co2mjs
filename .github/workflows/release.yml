@@ -39,14 +39,14 @@ jobs:
           cache: "npm"
           node-version: 18.x
           architecture: x64
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: https://registry.npmjs.org/
       - name: Run NPM Install
         run: npm ci && npm run build
       - name: Publish
+        run: |
+          echo "++++++++ ${{ env.NODE_AUTH_TOKEN }} +++++++++++"
+          cd dist
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "$NODE_AUTH_TOKEN"
-          echo "$GH_TOKEN"
-          cd dist
-          npm publish
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
