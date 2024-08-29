@@ -3,7 +3,6 @@ on:
   pull_request:
     types:
       - closed
-      - opened
     branches:
       - master
 
@@ -22,14 +21,14 @@ jobs:
           echo "The PR was successfully merged."
 
   if_merge_closed:
-    if: github.event.pull_request.action == 'closed'
+    if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
       - run: |
           echo "if_merge_closed"
 
   if_merge_open:
-    if: github.event.pull_request.action == 'opened'
+    if: github.event.action == 'opened'
     runs-on: ubuntu-latest
     steps:
       - run: |
@@ -41,3 +40,47 @@ jobs:
     steps:
       - run: |
           echo "if_event_name_pr"
+
+  publish-lib-npmjs:
+    name: Deploy library on npmjs.com
+    runs-on: ubuntu-22.04
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Download Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifact
+          path: dist
+      - name: Use Node.js 18x to run Tests
+        uses: actions/setup-node@v4
+        with:
+          registry-url: 'https://registry.npmjs.org/'
+          node-version: 18.x
+          cache: "npm"
+      - name: Install Dependencies
+        run: |
+          npm ci
+          echo '${{ github.event.pull_request.base.ref}} - ${{ github.event_name }} - ${{ github.ref }} - ${{ github.base_ref }} - ${{ github.actor.name }} - ${{ github.event.action }} - ${{ github.event.pull_request.merge }}'
+
+      - name: Update package.json - patching version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          curr_version=$(jq -r .version < package.json)
+          echo "*****The current version is $curr_version*****"
+          next_version=$(npm version patch --no-commit-hooks --no-git-tag-version)
+          echo "*****The next version is $next_version*****"
+          git add .
+          git commit -m "Patching version to $next_version"
+      - name: Push the version change
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
