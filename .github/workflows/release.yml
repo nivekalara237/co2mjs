@@ -1,14 +1,13 @@
 name: "Release new version"
 on:
-  push:
-    tags:
-      - v*
+  create:
 
 permissions:
   contents: write
 
 jobs:
   release:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     name: Release co2mjs
     runs-on: ubuntu-latest
     steps:
@@ -21,7 +20,9 @@ jobs:
              --title="${TAG_NAME#v}" \
              --generate-notes
 
+
   publish-npm:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     name: "Publish the new version to the npmjs"
     runs-on: ubuntu-22.04
     steps:

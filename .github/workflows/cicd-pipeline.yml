@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - "**"
+    tags-ignore:
+      - *
   pull_request:
     types:
       - closed
@@ -58,11 +60,6 @@ jobs:
         run: npm ci
       - name: Run Build Dist
         run: npm run build
-      - name: Upload Dist Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          path: dist
-          name: dist-artifact
   tests:
     if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
     name: Run Tests
