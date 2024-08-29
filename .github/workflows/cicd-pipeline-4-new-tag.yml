@@ -1,0 +1,6 @@
+name: "Create new tag: Create Github Release and publish new version on npmjs.com"
+on:
+  release:
+    types:
+      - created
+jobs:

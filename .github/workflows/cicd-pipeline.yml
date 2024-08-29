@@ -1,22 +1,25 @@
 name: Build, Lint, Test and Deploy co2m.js
-
-#on:
-#  push:
-#    branches:
-#      - "master"
-#  pull_request:
-#    branches:
-#      - "master"
-on: push
+env:
+  ENABLED_RUN: ${{ github.event_name == 'push' && github.actor.name != 'github-actions[bot]' }}
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
 jobs:
   eslint:
     name: Check Syntax with ESLint
     runs-on: ubuntu-22.04
+    if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [18.x] #, 20.x, 22.x
     steps:
-      - name: Checkout code
+      - name: Checkout code style
         uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }} to check Lint
         uses: actions/setup-node@v4
@@ -26,59 +29,102 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: npm ci
-
       - name: Run ESLint
-        run: echo 'npm run lint'
+        run: npm run lint
 
   buildDist:
+    if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
     name: Build-to-JS
-    needs: eslint
+    needs: [eslint, tests]
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [18.x] #, 20.x, 22.x
+        arch:
+          - x64
+          # - x86
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js 18.x to run build dist
+      - name: Use Node.js 18.x to run build dist on ${{ matrix.arch }}
         uses: actions/setup-node@v4
         with:
           cache: "npm"
-          node-version: 18.x
+          node-version: ${{ matrix.node-version}}
       - name: Install dependencies
         run: npm ci
       - name: Run Build Dist
         run: npm run build
-
+      - name: Upload Dist Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: dist
+          name: dist-artifact
   tests:
+    if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
     name: Run Tests
     needs: eslint
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [18.x] #, 20.x, 22.x
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js 18x to run Tests
+      - name: Use Node.js ${{ matrix.node-version }} to run Tests Covering
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          always-auth: 'false'
+          node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Install Dependencies
         run: npm ci
       - name: Run Tests Command (Jest-CI)
-        run: npm run test:jest
+        run: npm test
 
-  deploy-lib-npm:
-    name: Deploy library on npmjs.org
+  publish-lib-npmjs:
+    # if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
+    name: Deploy library on npmjs.com
     needs:
       - tests
       - buildDist
     runs-on: ubuntu-22.04
+    # if: startsWith(github.ref, 'refs/tags/v') && github.ref_name == github.ref_name && github.event.ref.startsWith('refs/tags/')
+    if: github.event.pull_request == true && github.event.pull_request.base.ref == 'master'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Download Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifact
+          path: dist
       - name: Use Node.js 18x to run Tests
         uses: actions/setup-node@v4
         with:
+          registry-url: 'https://registry.npmjs.org/'
           node-version: 18.x
           cache: "npm"
       - name: Install Dependencies
         run: npm ci
-      - name: Run Tests Command (Jest-CI)
-        run: echo 'coming soon'
+      - name: Update package.json - patching version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_ACCESS_TOKEN }}
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printenv
+          curr_version=$(jq -r .version < package.json)
+          echo "*****The current version is $curr_version*****"
+          next_version=$(npm version patch --no-commit-hooks --no-git-tag-version)
+          echo "*****The next version is $next_version*****"
+          git add .
+          git commit -m "Patching version to $next_version"
+      - name: Push the version change
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
