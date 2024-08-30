@@ -1,0 +1,33 @@
+name: "Deploy Test Cov to S3 Visualizer"
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-to-s3-bucket:
+    name: 'Upload Test Result'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Run test
+        uses: actions/setup-node@v4
+        run: npm ci && npm test
+      #- name: Move File Unique Directory
+      #  run: |
+      #    mkdir -p s3/co2visualizer/${{ github.ref_name }}
+      #    mv coverage/* s3/co2visualizer/${{ github.ref_name }}
+      - name: Upload Files to S3
+        uses: shallwefootball/s3-upload-action@master
+        id: S3
+        with:
+          aws_bucket: ${{ secrets.BUCKET_NAME }}
+          aws_key_id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_KEY }}
+          source_dir: 'coverage'
+          destination_dir: 'co2visualizer/${{ github.ref_name }}'
+      - name: Display URL
+        run: |
+          echo "${{ steps.S3.outputs.object_key }}"
+          echo "${{ secrets.VISUALIZER_URL }}/co2visualizer/${{ github.ref_name }}/index.html"
