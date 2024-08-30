@@ -1,8 +1,20 @@
 name: "Deploy Test Cov to S3 Visualizer"
 on:
-  push:
-    branches:
-      - master
+  workflow_run:
+    types:
+      - completed
+    workflows:
+      - Release
+  workflow_dispatch:
+    inputs:
+      tags-or-branch:
+        default: master
+        type: string
+        description: "Pick Tag of Branch to upload"
+      environment:
+        default: ENV
+        type: environment
+        description: 'Pick Environment'
 
 jobs:
   deploy-to-s3-bucket:

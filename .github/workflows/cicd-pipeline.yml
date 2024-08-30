@@ -1,4 +1,4 @@
-name: Build, Lint, Test and Deploy co2m.js
+name: CI-Build
 env:
   ENABLED_RUN: ${{ github.event_name == 'push' && github.actor.name != 'github-actions[bot]' }}
 on:
