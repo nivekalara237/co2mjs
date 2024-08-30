@@ -4,6 +4,8 @@ ___
 ![co2m.js workflow](https://github.com/nivekalara237/co2mjs/actions/workflows/cicd-pipeline.yml/badge.svg?branch=master)
 
 ![co2m.js workflow](https://github.com/nivekalara237/co2mjs/actions/workflows/release.yml/badge.svg)
+
+![co2m.js workflow](https://github.com/nivekalara237/co2mjs/actions/workflows/s3-visualizer.yml/badge.svg?branch=master)
 ___
 
 ### The Common JS Library
