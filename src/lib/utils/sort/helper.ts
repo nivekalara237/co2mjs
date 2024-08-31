@@ -1,0 +1,1 @@
+export const compareInt = (a: number | bigint, b: number | bigint): -1 | 0 | 1 => a > b ? 1 : (a === b ? 0 : -1);
