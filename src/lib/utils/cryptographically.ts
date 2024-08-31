@@ -1,4 +1,5 @@
 import { ThrowableUtils } from "./throwable.utils";
+import { getRandomValues } from "node:crypto";
 
 export type TypedIntArray =
   | Int8Array
@@ -20,7 +21,7 @@ export const bytesToInteger = (bytes: TypedIntArray) => {
 
 export const random = (): number => {
   const randomUint32Values = new Uint32Array(1);
-  crypto.getRandomValues(randomUint32Values);
+  getRandomValues(randomUint32Values);
   const u32Max = 0xffffffff;
   return randomUint32Values[0]! / (u32Max + 1);
 };
@@ -32,14 +33,14 @@ export const random = (): number => {
 export const randomInteger = (max: number): number => {
   if (max < 0 || Number.MAX_SAFE_INTEGER < max) {
     ThrowableUtils.raise(
-      "Argument 'max' must be an integer greater than or equal to 0",
+      "Argument 'max' must be an integer greater than or equal to 0"
     );
   }
   const bitLength = (max - 1).toString(2).length;
   const shift = bitLength % 8;
   const bytes = new Uint8Array(Math.ceil(bitLength / 8));
 
-  crypto.getRandomValues(bytes);
+  getRandomValues(bytes);
 
   if (shift !== 0) {
     bytes[0] &= (1 << shift) - 1;
@@ -48,7 +49,7 @@ export const randomInteger = (max: number): number => {
   let result = bytesToInteger(bytes);
 
   while (result > max - 1) {
-    crypto.getRandomValues(bytes);
+    getRandomValues(bytes);
     if (shift !== 0) {
       bytes[0] &= (1 << shift) - 1;
     }
