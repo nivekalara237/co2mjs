@@ -2,11 +2,11 @@ import { Comparable } from "./comparable";
 
 export class Comparator<T extends Comparable<T>> {
   static comparing = <T extends Comparable<T>>(): Comparator<T> => {
-    return null;
+    return new Comparator<T>();
   };
 
   public thenComparing = (): Comparator<T> => {
-    return null;
+    return this;
   };
 
   private _function = (a: T, b: T) => a.compareTo(b);
