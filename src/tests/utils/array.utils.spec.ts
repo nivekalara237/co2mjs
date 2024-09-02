@@ -1,4 +1,5 @@
 import { ArrayUtils } from "../../lib";
+import { IndexOutOfBoundsException } from "../../lib/exceptions/index-out-of-bounds.exception";
 
 describe("Tests array utilities", () => {
   describe("Collection of type Set should be converted as a linear array", () => {
@@ -346,6 +347,113 @@ describe("Tests array utilities", () => {
           id: 3,
           name: "john",
         },
+      ]);
+    });
+  });
+
+  describe("Insert", () => {
+    it("should insert element to the null array", () => {
+      expect(ArrayUtils.insert(null, 3)).toEqual([3]);
+    });
+    it("should insert element to the undefined array", () => {
+      expect(ArrayUtils.insert(undefined, 3)).toEqual([3]);
+    });
+    it("should insert element at end of array", () => {
+      expect(ArrayUtils.insert(["yes"], 3)).toEqual(["yes", 3]);
+      expect(ArrayUtils.insert(["yes", { id: 1, name: "Joe" }], true)).toEqual([
+        "yes",
+        { id: 1, name: "Joe" },
+        true,
+      ]);
+    });
+  });
+
+  describe("Insert At", () => {
+    it("should throw index out of bounds exception", () => {
+      expect(() => ArrayUtils.insertAt(null, -1, 0)).toThrow(
+        IndexOutOfBoundsException
+      );
+      expect(() => ArrayUtils.insertAt(null, 3, 0)).toThrow(
+        IndexOutOfBoundsException
+      );
+      expect(() => ArrayUtils.insertAt([2], 2, 0)).toThrow(
+        IndexOutOfBoundsException
+      );
+    });
+    it("should insert element when the array provided is null or undefined", () => {
+      expect(ArrayUtils.insertAt(null, 0, 3)).toEqual([3]);
+      expect(ArrayUtils.insertAt(undefined, 0, 3)).toEqual([3]);
+    });
+
+    it("should insert element at index", () => {
+      expect(ArrayUtils.insertAt([], 0, 1)).toEqual([1]);
+      expect(ArrayUtils.insertAt([1, 2, 3, 4], 2, 8)).toEqual([1, 2, 8, 3, 4]);
+      expect(ArrayUtils.insertAt(["apple", "mango"], 0, "orange")).toEqual([
+        "orange",
+        "apple",
+        "mango",
+      ]);
+    });
+  });
+
+  describe("Safe Copy", () => {
+    it("should safe copy null array", () => {
+      expect(ArrayUtils.safeCopy(null)).toEqual([]);
+    });
+    it("should safe copy undefined array", () => {
+      expect(ArrayUtils.safeCopy(undefined)).toEqual([]);
+    });
+    it("should safe copy an array", () => {
+      expect(ArrayUtils.safeCopy([2, "apple"])).toEqual([2, "apple"]);
+    });
+  });
+
+  describe("Insert All", () => {
+    it("should insert undefined array to null array", () => {
+      expect(ArrayUtils.insertAll(null, undefined)).toEqual([]);
+    });
+    it("should insert null array to an array", () => {
+      expect(ArrayUtils.insertAll([2, 1], undefined)).toEqual([2, 1]);
+      expect(ArrayUtils.insertAll([2, 1], null)).toEqual([2, 1]);
+    });
+    it("should insert an array to an array", () => {
+      expect(ArrayUtils.insertAll([2, 1], ["yes"])).toEqual([2, 1, "yes"]);
+      expect(
+        ArrayUtils.insertAll([2, 1], [{ id: 3, isMan: true }, "John"])
+      ).toEqual([
+        2,
+        1,
+        {
+          id: 3,
+          isMan: true,
+        },
+        "John",
+      ]);
+    });
+  });
+
+  describe("Insert First", () => {
+    it("should insert element at first of null array", () => {
+      expect(ArrayUtils.insertFirst(null, "banana")).toEqual(["banana"]);
+    });
+    it("should insert element at first of non null array", () => {
+      expect(ArrayUtils.insertFirst(["apple", "orange"], "banana")).toEqual([
+        "banana",
+        "apple",
+        "orange",
+      ]);
+    });
+  });
+
+  describe("Insert End", () => {
+    it("should insert element at end of null array", () => {
+      expect(ArrayUtils.insertEnd(null, "banana")).toEqual(["banana"]);
+    });
+    it("should insert element at end of non null array", () => {
+      expect(ArrayUtils.insertEnd(["apple", "orange"], "banana")).toEqual([
+        "apple",
+        "orange",
+        "banana",
       ]);
     });
   });

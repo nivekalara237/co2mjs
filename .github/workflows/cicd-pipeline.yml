@@ -1,6 +1,4 @@
 name: CI-Build
-env:
-  ENABLED_RUN: ${{ github.event_name == 'push' && github.actor.name != 'github-actions[bot]' }}
 on:
   push:
     branches:
@@ -12,7 +10,6 @@ on:
       - closed
     branches:
       - master
-# Later, in the jobs section of your actions.yml file.
 jobs:
   eslint:
     name: Check Syntax with ESLint
@@ -20,7 +17,7 @@ jobs:
     if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
     strategy:
       matrix:
-        node-version: [18.x] #, 20.x, 22.x
+        node-version: [ 18.x, 20.x, 22.x ]
     steps:
       - name: Checkout code style
         uses: actions/checkout@v4
@@ -35,23 +32,22 @@ jobs:
       - name: Run ESLint
         run: |
           npm run lint
-          echo '${{ github.event.pull_request.base.ref}} - ${{ github.event_name }} - ${{ github.ref }} - ${{ github.base_ref }} - ${{ github.actor.name }} - ${{ github.event.action }} - ${{ github.event.pull_request.merge }}'
 
   buildDist:
     if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
     name: Build-to-JS
-    needs: [eslint, tests]
+    needs: [ eslint, tests ]
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: [18.x] #, 20.x, 22.x
+        node-version: [ 18.x, 20.x, 22.x ]
         arch:
           - x64
           # - x86
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js 18.x to run build dist on ${{ matrix.arch }}
+      - name: Use Node.js ${{matrix.node-version}} to run build dist on ${{ matrix.arch }}
         uses: actions/setup-node@v4
         with:
           cache: "npm"
@@ -67,7 +63,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: [18.x] #, 20.x, 22.x
+        node-version: [ 18.x, 20.x, 22.x ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

@@ -1,8 +1,13 @@
 import { Comparable } from "./comparable";
-import { compareInt } from "./helper";
 
-export class Comparator implements Comparable<number> {
-  apply(a: number, b: number): -1 | 0 | 1 {
-    return compareInt(a, b);
-  }
+export class Comparator<T extends Comparable<T>> {
+  static comparing = <T extends Comparable<T>>(): Comparator<T> => {
+    return null;
+  };
+
+  public thenComparing = (): Comparator<T> => {
+    return null;
+  };
+
+  private _function = (a: T, b: T) => a.compareTo(b);
 }

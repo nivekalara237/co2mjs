@@ -24,9 +24,8 @@ jobs:
           node-version: 18.x
       - name: Run test
         run: |
+          printenv
           npm ci && npm test
-          touch coverage/error.html
-          echo "<html><body> <h1 style='color: red'>Error - Something wrong</h1> </body></html>" > coverage/error.html
       - name: Upload Files to S3
         uses: shallwefootball/s3-upload-action@master
         id: S3

@@ -33,7 +33,7 @@ export class ThrowableUtils {
    */
   public static requireNonEmptyArray = (
     value: any,
-    valueName: string = "value",
+    valueName: string = "value"
   ) => {
     if (
       ObjectUtils.isNullOrUndefined(value) ||
@@ -47,11 +47,19 @@ export class ThrowableUtils {
   /**
    * This function raise new Exception
    *
-   * @param messageError the message error
+   * @param messageOrErrorInstance the message error
    * @param cause the root cause of this exception
    */
-  public static raise = (messageError: string, cause?: unknown) => {
-    throw new Error(messageError, cause);
+  public static raise = (
+    messageOrErrorInstance: string | Error,
+    cause?: unknown
+  ) => {
+    if (messageOrErrorInstance instanceof Error) {
+      messageOrErrorInstance.cause = cause;
+      throw messageOrErrorInstance;
+    } else {
+      throw new Error(messageOrErrorInstance, cause);
+    }
   };
 
   public static isError = (value: any) => {
