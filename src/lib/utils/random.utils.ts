@@ -20,9 +20,14 @@ export class RandomUtils {
    *
    * @param min the inclusive min value
    * @param max the exclusive max value
+   * @param maxInclude specify if the max value is included or not
    * @throws throw error if min equal max
    */
-  public static nextIntInside = (min: number, max: number): number => {
+  public static nextIntInside = (
+    min: number,
+    max: number,
+    maxInclude?: boolean
+  ): number => {
     if (!Number.isInteger(min) || !Number.isInteger(max)) {
       ThrowableUtils.raise("Arguments 'min' and 'max' must be an integer");
     }
@@ -30,16 +35,18 @@ export class RandomUtils {
     if (min === max) {
       ThrowableUtils.raise("The min and max values can't be equal");
     }
-    const dataView = new Uint8Array(1);
+    const dataView = new Uint32Array(1);
     getRandomValues(dataView);
     const value = dataView.at(0);
     if (BranchUtils.betweenRangeNumber(value, min, max - 1)) {
       return value;
     }
-    if (value < min) {
-      return (value + min) % max;
-    }
-    return value % max;
+
+    const random = dataView.at(0) / (0xffffffff + 1);
+    min = Math.min(min);
+    max = Math.max(max);
+
+    return Math.floor(random * (max - min + (maxInclude ? 1 : 0))) + min;
   };
 
   /**
