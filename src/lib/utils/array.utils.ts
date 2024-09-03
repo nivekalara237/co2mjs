@@ -33,7 +33,20 @@ export class ArrayUtils {
     );
   };
 
-  public static anyToArray = <R>(value: any): R[] => {
+  /**
+   * Convert any type of value to an array
+   * <pre>
+   *     ArrayUtils.anyToArray(null)                    = []
+   *     ArrayUtils.anyToArray(undefined)               = []
+   *     ArrayUtils.anyToArray(function)                = [function]
+   *     ArrayUtils.anyToArray(1)                       = [1]
+   *     ArrayUtils.anyToArray("1")                     = ["1"]
+   *     ArrayUtils.anyToArray(["1", 3])                = ["1", 3]
+   *     ArrayUtils.anyToArray({name: 'apple', id: 3})  = ["apple", 3]
+   * </pre>
+   * @param value the array converted
+   */
+  public static anyToArray = <R>(value: any, preserveKey?: boolean): R[] => {
     if (ObjectUtils.isNullOrUndefined(value)) {
       return [];
     }
@@ -43,7 +56,9 @@ export class ArrayUtils {
     }
 
     if (typeof value === "object") {
-      return Object.values(value).map((v) => v as R);
+      return Object.keys(value).map((key) =>
+        preserveKey ? ObjectUtils.appendChild({}, key, value[key]) : value[key]
+      );
     }
 
     return [value];

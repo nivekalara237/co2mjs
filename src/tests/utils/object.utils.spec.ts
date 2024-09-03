@@ -41,33 +41,33 @@ describe("ObjectUtils", () => {
     });
   });
 
-  describe("appendDefined", () => {
+  describe("appendChild", () => {
     it("should append undefined child name to objet", () => {
       const obj = { weight: "apples" };
-      expect(ObjectUtils.appendDefined(obj, undefined, "apples")).toBe(obj);
-      expect(ObjectUtils.appendDefined(obj, null, "apples")).toBe(obj);
+      expect(ObjectUtils.appendChild(obj, undefined, "apples")).toBe(obj);
+      expect(ObjectUtils.appendChild(obj, null, "apples")).toBe(obj);
     });
     it("should append undefined child value to objet", () => {
       const obj = { weight: "apples" };
-      expect(ObjectUtils.appendDefined(obj, "name", undefined)).toBe(obj);
+      expect(ObjectUtils.appendChild(obj, "name", undefined)).toBe(obj);
     });
 
     it("should append child to undefined objet", () => {
       expect(
-        ObjectUtils.appendDefined(undefined, "name", "apples"),
+        ObjectUtils.appendChild(undefined, "name", "apples")
       ).toBeUndefined();
-      expect(ObjectUtils.appendDefined(null, "name", "apples")).toBeUndefined();
+      expect(ObjectUtils.appendChild(null, "name", "apples")).toBeUndefined();
     });
 
     it("should append undefined child to objet", () => {
       const obj = { weight: "apples" };
-      expect(ObjectUtils.appendDefined(obj, undefined, "apples")).toBe(obj);
-      expect(ObjectUtils.appendDefined(obj, null, "apples")).toBe(obj);
+      expect(ObjectUtils.appendChild(obj, undefined, "apples")).toBe(obj);
+      expect(ObjectUtils.appendChild(obj, null, "apples")).toBe(obj);
     });
 
     it("should append boolean child to objet", () => {
       const obj = { weight: "apples" };
-      expect(ObjectUtils.appendDefined(obj, "circle", true)).toEqual({
+      expect(ObjectUtils.appendChild(obj, "circle", true)).toEqual({
         ...obj,
         circle: true,
       });
@@ -76,35 +76,35 @@ describe("ObjectUtils", () => {
     it("should append bigint child to objet", () => {
       const obj = { weight: "apples" };
       expect(
-        ObjectUtils.appendDefined(obj, "area", 70980980980980980898008n),
+        ObjectUtils.appendChild(obj, "area", 7.098098098098098e22)
       ).toEqual({ ...obj, area: 7.098098098098098e22 });
     });
 
     it("should append number child to objet", () => {
       const obj = { weight: "apples" };
-      expect(ObjectUtils.appendDefined(obj, "area", 9)).toEqual({
+      expect(ObjectUtils.appendChild(obj, "area", 9)).toEqual({
         ...obj,
         area: 9,
       });
     });
 
     /*it('should append function child to objet', () => {
-            const obj = {weight: "apples"};
-            expect(ObjectUtils.appendDefined(obj, "details", function () {
-                return "The appels details.."
-            })).toEqual({...obj, details:  function () {
-                    return "The appels details.."
-                }})
-        });
-
-        it('should append symbol child to objet', () => {
-            const obj = {weight: "apples"};
-            expect(ObjectUtils.appendDefined(obj, "sym", Symbol(7)).toEqual({...obj, details: ""}))
-        });*/
+                        const obj = {weight: "apples"};
+                        expect(ObjectUtils.appendDefined(obj, "details", function () {
+                            return "The appels details.."
+                        })).toEqual({...obj, details:  function () {
+                                return "The appels details.."
+                            }})
+                    });
+            
+                    it('should append symbol child to objet', () => {
+                        const obj = {weight: "apples"};
+                        expect(ObjectUtils.appendDefined(obj, "sym", Symbol(7)).toEqual({...obj, details: ""}))
+                    });*/
 
     it("should append string child to objet", () => {
       const obj = { weight: "apples" };
-      expect(ObjectUtils.appendDefined(obj, "desc", "fruit")).toEqual({
+      expect(ObjectUtils.appendChild(obj, "desc", "fruit")).toEqual({
         ...obj,
         desc: "fruit",
       });
@@ -113,7 +113,7 @@ describe("ObjectUtils", () => {
     it("should append object child to objet", () => {
       const obj = { weight: "apples" };
       expect(
-        ObjectUtils.appendDefined(obj, "category", { name: "fruit" }),
+        ObjectUtils.appendChild(obj, "category", { name: "fruit" })
       ).toEqual({ ...obj, category: { name: "fruit" } });
     });
   });

@@ -91,4 +91,7 @@ export class StringUtils {
   }
 
   static isEmpty = (str: string) => !str || str.trim().length === 0;
+
+  // isNotEmpty(str: string | undefined | null) : check if str is string of size greater than zero
+  // toJson(string) : convert string to json
 }

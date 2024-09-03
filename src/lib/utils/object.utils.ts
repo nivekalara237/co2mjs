@@ -9,6 +9,12 @@ export class ObjectUtils {
     return this.isNull(obj) || this.isUndefined(obj);
   };
 
+  public static anyNullOrUndefined = (...objs: any[]): boolean => {
+    // if ()
+    // return this.isNull(obj) || this.isUndefined(obj);
+    throw new Error("Not implemented!");
+  };
+
   public static isNotNullAndNotUndefined = <T>(obj: T): boolean => {
     return !this.isNullOrUndefined(obj);
   };
@@ -43,7 +49,14 @@ export class ObjectUtils {
     return !obj;
   }
 
-  public static appendDefined<T>(obj: T, childKey: string, childValue: any) {
+  public static addEntry = <T>(obj: T, key: string, value: any): T => {
+    if (this.isNullOrUndefined(obj)) return undefined;
+    if (this.isNullOrUndefined(key)) return obj;
+    obj[key] = value;
+    return obj;
+  };
+
+  public static appendChild<T>(obj: T, childKey: string, childValue: any) {
     if (this.isNullOrUndefined(obj)) return undefined;
     if (
       this.isNullOrUndefined(childValue) ||
@@ -51,6 +64,7 @@ export class ObjectUtils {
     ) {
       return obj;
     }
+    const child = {};
     let value = childValue;
     switch (typeof childValue) {
       case "boolean":
@@ -73,10 +87,8 @@ export class ObjectUtils {
         value = childValue;
         break;
     }
-    return Object.assign(
-      <object>obj,
-      JSON.parse(`{"${childKey}":${childValue}}`),
-    );
+    child[childKey] = value;
+    return Object.assign(obj, child);
   }
 
   public static isDeepEqual = (obj1: any, obj2: any): boolean => {
@@ -104,7 +116,7 @@ export class ObjectUtils {
       return false;
     }
 
-    for (var key of objKeys1) {
+    for (const key of objKeys1) {
       const value1 = obj1[key];
       const value2 = obj2[key];
       if (!this.isDeepEqual(value1, value2)) {
@@ -145,4 +157,12 @@ export class ObjectUtils {
     }
     return this.isNullOrUndefined(value);
   };
+
+  static has = (obj: any, hasKeyValue: string) => {
+    // if (this.isNullOrUndefined(obj))
+  }
+
+  //   anyNullOrUndefined = (...objs: any[]): boolean : check at least one is null or undefined
+  // has<T>(obj: T, propertyName: string): check if obj has property of name provided
+
 }

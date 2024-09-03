@@ -9,7 +9,7 @@ describe("String Builder", () => {
   });
 
   it("Append string of any kind supported", () => {
-    const builder = new StringBuilder()
+    const builder = StringBuilder.create()
       .append("I have ")
       .append(3)
       .append(" apples? ")

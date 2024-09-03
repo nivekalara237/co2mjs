@@ -91,7 +91,7 @@ export class BooleanUtils {
       return false;
     }
 
-    if (NumericUtils.isNumeric(value)) {
+    if (NumericUtils.isSafeNumber(value)) {
       return +value > 0;
     }
 
@@ -205,7 +205,7 @@ export class BooleanUtils {
    * @param value the value converted
    */
   public static toBoolean = (
-    value: boolean | bigint | number | string | null | undefined,
+    value: boolean | bigint | number | string | null | undefined
   ) => {
     if (ObjectUtils.isNullOrUndefined(value)) {
       return false;
@@ -215,10 +215,10 @@ export class BooleanUtils {
       return value > 0;
     } else if (typeof value === "string") {
       const _true = ["on", "yes", "y", "true", "t", "ok"].includes(
-        value.toLowerCase(),
+        value.toLowerCase()
       );
       const _false = ["off", "no", "n", "false", "f", "ko"].includes(
-        value.toLowerCase(),
+        value.toLowerCase()
       );
       if (_true) return true;
       if (_false) return false;
@@ -249,7 +249,7 @@ export class BooleanUtils {
   public static numberToBoolean = (
     value: number,
     trueNumber: number,
-    falseNumber: number,
+    falseNumber: number
   ) => {
     if (trueNumber === falseNumber) {
       ThrowableUtils.raise("Illegal(s) argument(s) passed");
@@ -293,7 +293,7 @@ export class BooleanUtils {
   public static stringToBoolean = (
     value: string,
     trueStr: string,
-    falseStr: string,
+    falseStr: string
   ): boolean => {
     if (trueStr === falseStr) {
       ThrowableUtils.raise("Illegal(s) argument(s) passed");
@@ -322,7 +322,7 @@ export class BooleanUtils {
   public static toNumber = (
     value: boolean,
     trueNumber: number,
-    falseNumber: number,
+    falseNumber: number
   ): number => {
     return value ? trueNumber : falseNumber;
   };
@@ -330,7 +330,7 @@ export class BooleanUtils {
   public static toChars = (
     value: boolean,
     trueStr: string,
-    falseStr: string,
+    falseStr: string
   ): string => {
     return value ? trueStr : falseStr;
   };
