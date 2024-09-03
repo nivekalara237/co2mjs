@@ -20,6 +20,6 @@ export default [
     },
   })),
   {
-    ignores: ["dist/*", "**/*.spec.ts"],
+    ignores: ["dist/*", "**/*.spec.ts", "coverage/*"],
   },
 ];

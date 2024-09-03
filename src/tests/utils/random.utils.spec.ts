@@ -1,9 +1,21 @@
 import { RandomUtils } from "../../lib";
+
 describe("Random Utils Tests", () => {
   it("should get random boolean", () => {
     expect(() => RandomUtils.nextBoolean()).not.toThrow();
     expect(RandomUtils.nextBoolean()).not.toBeNull();
     expect(RandomUtils.nextBoolean()).not.toBeUndefined();
+  });
+  it("should throw error when getting random integer between", () => {
+    expect(() => RandomUtils.nextIntInside(undefined, undefined)).toThrow();
+    expect(() => RandomUtils.nextIntInside(undefined, 2)).toThrow();
+    expect(() => RandomUtils.nextIntInside(2, undefined)).toThrow();
+    expect(() => RandomUtils.nextIntInside(2, 2)).toThrow();
+  });
+
+  it("should generate an int number randomly between", () => {
+    expect(RandomUtils.nextIntInside(10, 56)).toBeGreaterThanOrEqual(10);
+    expect(RandomUtils.nextIntInside(10, 56)).toBeLessThan(56);
   });
 
   it("should generate an int number randomly", () => {
@@ -29,7 +41,7 @@ describe("Random Utils Tests", () => {
   it("should throw error when generating a random string", () => {
     expect(() => RandomUtils.chars(0)).toThrow("The length must higher than 0");
     expect(() => RandomUtils.chars(-2)).toThrow(
-      "The length must higher than 0",
+      "The length must higher than 0"
     );
   });
 
@@ -43,16 +55,16 @@ describe("Random Utils Tests", () => {
 
   it("should throw error when generating bytes", () => {
     expect(() => RandomUtils.rangeBytes(-6, { min: 2, max: 9 })).toThrow(
-      "byteLength must between 1 and 2^53 − 1",
+      "byteLength must between 1 and 2^53 − 1"
     );
     expect(() =>
-      RandomUtils.rangeBytes(Number.MAX_VALUE + 8, { min: 2, max: 9 }),
+      RandomUtils.rangeBytes(Number.MAX_VALUE + 8, { min: 2, max: 9 })
     ).toThrow("byteLength must between 1 and 2^53 − 1");
     expect(() => RandomUtils.rangeBytes(12, { min: 2, max: 2 })).toThrow(
-      "The min and max must be different value",
+      "The min and max must be different value"
     );
     expect(() => RandomUtils.rangeBytes(12, { min: 4, max: 1 })).toThrow(
-      "The max must be greater than min",
+      "The max must be greater than min"
     );
   });
 

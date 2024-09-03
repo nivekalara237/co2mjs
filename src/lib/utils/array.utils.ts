@@ -2,8 +2,8 @@ import { ObjectUtils } from "./object.utils";
 import { ThrowableUtils } from "./throwable.utils";
 import { compareInt } from "./sort/helper";
 import { IndexOutOfBoundsException } from "../exceptions/index-out-of-bounds.exception";
-import { Comparator } from "./sort/comparator";
-import { Comparable } from "./sort/comparable";
+import { Comparators } from "./sort/comparators";
+import { CompareTo } from "./sort/compare-to";
 
 export class ArrayUtils {
   public static setToArray = (set: Set<any> | any): any[] => {
@@ -114,12 +114,15 @@ export class ArrayUtils {
     });
   };
 
-  /*eslint no-unused-vars: "off"*/
-  static sortable = <T extends Comparable<T>>(
+  static sortBy = <T extends CompareTo<T>>(
     array: Array<T>,
-    comparator: Comparator<T>
+    comparators: Comparators<T>
   ): Array<T> => {
-    return null;
+    ThrowableUtils.requireNonNull(array, "array");
+    ThrowableUtils.requireDefined(array, "array");
+    ThrowableUtils.requireNonNull(comparators, "comparators");
+    ThrowableUtils.requireDefined(comparators, "comparators");
+    return [...array].sort(comparators.compareFn());
   };
 
   static distinct = <T>(array: T[], byKey?: string) => {

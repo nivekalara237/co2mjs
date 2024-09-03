@@ -23,7 +23,7 @@ export class RandomUtils {
    * @throws throw error if min equal max
    */
   public static nextIntInside = (min: number, max: number): number => {
-    if (!Number.isInteger(min) && !Number.isInteger(max)) {
+    if (!Number.isInteger(min) || !Number.isInteger(max)) {
       ThrowableUtils.raise("Arguments 'min' and 'max' must be an integer");
     }
 
@@ -72,12 +72,12 @@ export class RandomUtils {
    */
   public static rangeBytes = (
     length: number,
-    range: { min: number; max: number },
+    range: { min: number; max: number }
   ): ArrayBuffer => {
     if (length <= 0 || length > Number.MAX_SAFE_INTEGER) {
       ThrowableUtils.raise(
         "byteLength must between 1 and 2^53 − 1",
-        "byteLength",
+        "byteLength"
       );
     }
 
@@ -102,7 +102,7 @@ export class RandomUtils {
     if (byteLength <= 0 || byteLength > Number.MAX_SAFE_INTEGER) {
       ThrowableUtils.raise(
         "byteLength must between 1 and 2^53 − 1",
-        "byteLength",
+        "byteLength"
       );
     }
 
@@ -115,6 +115,26 @@ export class RandomUtils {
   };
 
   // ---------------- String Random ----------------
+
+  /**
+   * Generate a random string (unsecure)
+   *
+   * @param length the length of generated string
+   * @throws Error throw error is length is less than 0 or equal
+   */
+  public static chars = (length: number) => {
+    return this.randomString(length, RandomUtils.ALPHA_NUMERIC_CHARS);
+  };
+
+  /**
+   * Generate a secure random string
+   *
+   * @param length the length of generated string
+   * @throws Error throw error is length is less than 0 or equal
+   */
+  public static secureChars = (length: number) => {
+    return this.secureString(length, RandomUtils.ALPHA_NUMERIC_CHARS);
+  };
 
   private static secureString = (len: number, __chars: string) => {
     if (len <= 0) {
@@ -136,25 +156,5 @@ export class RandomUtils {
       chars.push(__chars.charAt(Math.floor(Math.random() * __chars.length)));
     }
     return chars.join("");
-  };
-
-  /**
-   * Generate a random string (unsecure)
-   *
-   * @param length the length of generated string
-   * @throws Error throw error is length is less than 0 or equal
-   */
-  public static chars = (length: number) => {
-    return this.randomString(length, RandomUtils.ALPHA_NUMERIC_CHARS);
-  };
-
-  /**
-   * Generate a secure random string
-   *
-   * @param length the length of generated string
-   * @throws Error throw error is length is less than 0 or equal
-   */
-  public static secureChars = (length: number) => {
-    return this.secureString(length, RandomUtils.ALPHA_NUMERIC_CHARS);
   };
 }

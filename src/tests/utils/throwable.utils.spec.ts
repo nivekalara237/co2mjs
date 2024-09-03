@@ -80,4 +80,14 @@ describe("Throwable utils: tests", () => {
   it("should check if value is error of non Error", () => {
     expect(ThrowableUtils.isError("Error")).toBeFalsy();
   });
+
+  it("Should rease an error due undefined and NaN value ", () => {
+    expect(() => ThrowableUtils.requireDefined(undefined)).toThrow();
+    expect(() => ThrowableUtils.requireDefined(NaN)).toThrow();
+  });
+
+  it("Shouldn't rease an error due non-undefined and non-NaN value ", () => {
+    expect(() => ThrowableUtils.requireDefined({})).not.toThrow();
+    expect(() => ThrowableUtils.requireDefined(2)).not.toThrow();
+  });
 });
