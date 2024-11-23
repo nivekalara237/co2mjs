@@ -80,7 +80,7 @@ export class ThrowableUtils {
       messageOrErrorInstance.cause = cause;
       throw messageOrErrorInstance;
     } else {
-      throw new Error(messageOrErrorInstance, cause);
+      throw new Error(messageOrErrorInstance, { cause });
     }
   };
 

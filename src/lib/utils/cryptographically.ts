@@ -1,5 +1,5 @@
 import { ThrowableUtils } from "./throwable.utils";
-import { getRandomValues } from "node:crypto";
+// import { randomUUID } from "node:crypto"
 
 export type TypedIntArray =
   | Int8Array
@@ -12,6 +12,9 @@ export type TypedFloatArray = Float32Array | Float64Array;
 export type TypedBigIntArray = BigInt64Array | BigUint64Array;
 export type TypedArray = TypedIntArray | TypedFloatArray | TypedBigIntArray;
 
+
+export const uuid = (): string => crypto.randomUUID();
+
 export const bytesToInteger = (bytes: TypedIntArray) => {
   const binary = Array.from(bytes)
     .map((byte) => byte.toString(2).padStart(8, "0"))
@@ -21,7 +24,7 @@ export const bytesToInteger = (bytes: TypedIntArray) => {
 
 export const random = (): number => {
   const randomUint32Values = new Uint32Array(1);
-  getRandomValues(randomUint32Values);
+  crypto.getRandomValues(randomUint32Values);
   const u32Max = 0xffffffff;
   return randomUint32Values[0]! / (u32Max + 1);
 };
@@ -40,7 +43,7 @@ export const randomInteger = (max: number): number => {
   const shift = bitLength % 8;
   const bytes = new Uint8Array(Math.ceil(bitLength / 8));
 
-  getRandomValues(bytes);
+  crypto.getRandomValues(bytes);
 
   if (shift !== 0) {
     bytes[0] &= (1 << shift) - 1;
@@ -49,7 +52,7 @@ export const randomInteger = (max: number): number => {
   let result = bytesToInteger(bytes);
 
   while (result > max - 1) {
-    getRandomValues(bytes);
+    crypto.getRandomValues(bytes);
     if (shift !== 0) {
       bytes[0] &= (1 << shift) - 1;
     }
