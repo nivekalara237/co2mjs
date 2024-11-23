@@ -1,12 +1,11 @@
 import { esbuildPlugin } from "@web/dev-server-esbuild";
 import configs from "./jest.config.js"
-import { chromeLauncher } from "@web/test-runner";
 import { playwrightLauncher } from "@web/test-runner-playwright";
 
 export default /** @type {import("@web/test-runner").TestRunnerConfig} */{
   files: [
     "src/tests/**/*.spec.ts",
-    // "src/tests/utils/array.utils.spec.ts"
+    "src/tests/**/*.browser-spec.ts",
   ],
   concurrent: 10,
   plugins: [
@@ -33,33 +32,35 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */{
   },
   nodeResolve: true,
   browsers: [
-    /**/chromeLauncher({
+    /*chromeLauncher({
       launchOptions: {
         args: ['--no-sandbox']
       }
+    }),*/
+    playwrightLauncher({
+      product: "webkit",
+      launchOptions: {
+        headless: true
+      },
     }),
     playwrightLauncher({
-      product: "webkit"
-    }),
-    playwrightLauncher({
-      product: "firefox"
+      product: "firefox",
+      launchOptions: {
+        headless: true
+      },
     }),
     playwrightLauncher({
       product: "chromium",
       launchOptions: {
-
+        headless: true
       },
     })
   ],
-
-  testRunnerHtml: testFramework => `
+  testRunnerHtml: (testFramework) => `
   <html>
     <head>
-      <script type="module" src="${testFramework}">
-      console.log(this.testFramework)
-</script>
-      <script type="module" src="./node_modules/jest-browser-globals/build-es5/index.js">
-      </script>
+      <script type="module" src="${testFramework}"></script>
+      <script type="module" src="./node_modules/jest-browser-globals/build-es5/index.js"></script>
     </head>
   </html>
   `
