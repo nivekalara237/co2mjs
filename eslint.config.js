@@ -20,6 +20,6 @@ export default [
     },
   })),
   {
-    ignores: ["dist/*", "**/*.spec.ts", "coverage/*"],
+    ignores: ["dist/*", "**/*.spec.ts", "**/*.browser-spec.ts", "coverage/*",'web-build/*'],
   },
 ];
