@@ -188,4 +188,13 @@ describe("StringUtils", () => {
       expect(StringUtils.stringify(() => 1)).toEqual(undefined);
     });
   });
+
+  describe("join", ()=>{
+      it("should join list elements", ()=>{
+        expect(StringUtils.join(["tomate","oignon","ail","persil"], "*")).toEqual("tomate*oignon*ail*persil");
+      });
+      it("should return empty string for empty list", () => {
+        expect(StringUtils.join([], "*")).toEqual("");
+      });
+  });
 });

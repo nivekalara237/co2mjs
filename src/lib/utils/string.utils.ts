@@ -113,4 +113,11 @@ export class StringUtils {
   }
 
   static isEmpty = (str: string) => !str || str.trim().length === 0;
+
+  public static join(list: Array<any>, sep: string = "") : string
+  {
+      if(list.length === 0 || list === null) return "";
+
+      return list.join(sep);
+  }
 }
