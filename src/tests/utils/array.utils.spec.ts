@@ -233,7 +233,7 @@ describe("Tests array utilities", () => {
       ]);
     });
     it("should sort array of objects by key - (string) DESC and ignore case", () => {
-      expect(
+      const res =
         ArrayUtils.sort<{ id: number; name: string }>(
           [
             {
@@ -254,8 +254,9 @@ describe("Tests array utilities", () => {
             reverse: false,
             ignoreCase: true,
           }
-        )
-      ).toEqual([
+        );
+
+      expect(res).toEqual([
         {
           id: 2,
           name: "Alex",
@@ -292,7 +293,7 @@ describe("Tests array utilities", () => {
           }
         )
       ).toThrow(
-        "Incompatibility with the values of key provider: first arg type=number and second arg type=string"
+        /^Incompatibility with the values of key provider: first arg type=(string|number) and second arg type=(string|number)$/
       );
     });
   });

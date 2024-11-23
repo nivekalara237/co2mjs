@@ -66,4 +66,7 @@ Promise.all([
     outfile: "./dist/index.min.js",
     platform: "node",
   }),
-]).then();
+]).then()
+  .catch(er => {
+  console.error(er);
+});

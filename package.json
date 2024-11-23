@@ -31,11 +31,16 @@
     "test:jest": "jest --colors --ci --updateSnapshot --coverage",
     "jest:clear": "jest --clear cache --colors --ci --notity",
     "jest:watch": "jest  --colors --ci --coverage --watch",
-    "clean": "rm -rf coverage; rm -rf dist || exit 0",
+    "browser-tests": "jasmine",
+    "clean": "rm -rf coverage; rm -rf dist || exit 0; rm -rf web-build || exit 0",
     "deleteModules": "rm -rf node_modules",
     "dev": "node ./tasks/dev.js",
     "build": "node ./tasks/build.js",
-    "lint": "eslint"
+    "@web/test/build": "node ./tasks/browser-test.js",
+    "lint": "eslint",
+    "build-tests": "tsc --project tsconfig.test.json",
+    "@web/test/1": "npm run @web/test/build && web-test-runner web-build/**/*.spec.js --config web-test-runner.config.js --no-resolve",
+    "@web/test": "web-test-runner --config web-test-runner.config.js --no-resolve"
   },
   "exports": {
     ".": {
@@ -70,34 +75,38 @@
     "email": "admin@nivekaa.com"
   },
   "license": "Apache-2.0",
-  "dependencies": {
-    "@types/node": "^20.14.9"
-  },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
     "@jest/globals": "^29.7.0",
     "@tsconfig/node-lts": "^20.1.3",
     "@types/jest": "^29.5.12",
+    "@web/dev-server-esbuild": "^1.0.3",
+    "@web/test-runner": "^0.19.0",
+    "@web/test-runner-playwright": "^0.11.0",
     "esbuild": "^0.23.1",
     "esbuild-node-externals": "^1.14.0",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-text-replace": "^1.3.0",
     "esbuild-plugin-write-file": "^0.0.4",
     "eslint": "^9.9.1",
+    "expect": "^29.7.0",
     "globals": "^15.9.0",
     "husky": "^9.1.5",
     "import-sort-cli": "^6.0.0",
     "import-sort-style-renke": "^6.0.0",
     "jest": "^29.7.0",
+    "jest-browser-globals": "^25.1.0-beta",
     "jest-config": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jest-mock": "^29.7.0",
     "lint-staged": "^15.2.9",
     "node-notifier": "^10.0.1",
     "npm-commands": "^1.2.1",
     "prettier": "^3.3.3",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.5.3",
+    "typescript": "^5.6.3",
     "typescript-eslint": "^8.3.0",
-    "yargs-parser": "^19.0.4"
+    "webpack": "^5.96.1",
+    "playwright": "^1.49.0"
   }
 }

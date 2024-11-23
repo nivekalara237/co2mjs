@@ -1,7 +1,6 @@
 import { ThrowableUtils } from "./throwable.utils";
 import { BranchUtils } from "./branch.utils";
 import { random, randomInteger } from "./cryptographically";
-import { getRandomValues } from "node:crypto";
 
 export class RandomUtils {
   private static ALPHA_NUMERIC_CHARS =
@@ -36,7 +35,7 @@ export class RandomUtils {
       ThrowableUtils.raise("The min and max values can't be equal");
     }
     const dataView = new Uint32Array(1);
-    getRandomValues(dataView);
+    crypto.getRandomValues(dataView);
     const value = dataView.at(0);
     if (BranchUtils.betweenRangeNumber(value, min, max - 1)) {
       return value;

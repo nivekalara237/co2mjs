@@ -36,7 +36,7 @@ jobs:
   buildDist:
     if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
     name: Build-to-JS
-    needs: [ eslint, tests ]
+    needs: [ eslint, tests, browsers-testing ]
     runs-on: ubuntu-22.04
     strategy:
       matrix:
@@ -77,3 +77,25 @@ jobs:
         run: npm ci
       - name: Run Tests Command (Jest-CI)
         run: npm test
+  browsers-testing:
+    if: github.event_name == 'push' && github.actor.name != 'github-actions[bot]'
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    needs: [ tests ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npm run @web/test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
