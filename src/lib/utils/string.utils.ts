@@ -1,6 +1,7 @@
 import { ObjectUtils } from "./object.utils";
 
 export class StringUtils {
+  private static readonly BLANK_SEPARATOR = '';
   public static stringify = (s: any) => {
     if (ObjectUtils.isNullOrUndefined(s)) {
       return null;
@@ -15,14 +16,35 @@ export class StringUtils {
   };
   public static capitalisedFirst = (s: string) => {
     if (this.isEmpty(s)) return s;
-    if (ObjectUtils.size(this.trimLetf(s)) === 1)
-      return this.trimLetf(s).toUpperCase();
-    s = this.trimLetf(s);
+    if (ObjectUtils.size(this.trimLeft(s)) === 1)
+      return this.trimLeft(s).toUpperCase();
+    s = this.trimLeft(s);
     return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   };
 
-  public static concat(str1: string, str2: string, ...moreStrArgs: string[]) {
-    return str1.concat(...[str2, ...moreStrArgs]);
+  /**
+   * Concatenates multiple strings, filtering out null or undefined values.
+   * The resulting strings are joined using a blank separator.
+   * @example
+   *  const result1 = StringUtils.concat("Hello", " ", "world", "!"); // "Hello world!"
+   *  const result2 = StringUtils.concat("Java", null, " ",  "TypeScript", undefined, " ", "Python"); // "Java TypeScript Python"
+   *  const result3 = StringUtils.concat(null, undefined); // ""
+   *
+   *
+   * @param str1 - The first string to be concatenated.
+   * @param str2 - The second string to be concatenated.
+   * @param moreStrArgs - Additional strings to be concatenated.
+   * @returns The concatenated string with non-null and non-undefined values, separated by ``.
+   */
+  public static concat = (str1: string, str2: string, ...moreStrArgs: string[]): string => {
+    const arr = [str1, str2, ...moreStrArgs];
+    const safe = [];
+    for (const s of arr) {
+      if (ObjectUtils.isNotNullAndNotUndefined<string>(s)) {
+        safe.push(s);
+      }
+    }
+    return safe.join(StringUtils.BLANK_SEPARATOR);
   }
 
   public static trim(str: string, char?: string) {
@@ -32,18 +54,18 @@ export class StringUtils {
     if (ObjectUtils.isNullOrUndefined(char)) {
       return str.trim();
     }
-    const strLeftTrimmed = this.trimLetf(str, char);
+    const strLeftTrimmed = this.trimLeft(str, char);
     return this.trimRight(strLeftTrimmed, char);
   }
 
-  public static trimLetf(str: string, char?: string) {
+  public static trimLeft(str: string, char?: string) {
     if (ObjectUtils.isNullOrUndefined(str)) {
       return str;
     } else if (ObjectUtils.isNullOrUndefined(char)) {
       return str.trimStart();
     } else {
       if (str.startsWith(<string>char)) {
-        return this.trimLetf(str.substring(1, str.length), char);
+        return this.trimLeft(str.substring(1, str.length), char);
       } else {
         return str;
       }

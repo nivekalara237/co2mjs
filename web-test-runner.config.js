@@ -38,9 +38,25 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */{
       }
     }),*/
     playwrightLauncher({
+      product: "chromium",
+      launchOptions: {
+        headless: true,
+        chromiumSandbox: false,
+        channel: "msedge-dev"
+      },
+    }),
+    /*playwrightLauncher({
       product: "webkit",
       launchOptions: {
-        headless: true
+
+      }
+    }),*/
+    playwrightLauncher({
+      product: "chromium",
+      launchOptions: {
+        headless: true,
+        chromiumSandbox: false,
+        channel: "chrome"
       },
     }),
     playwrightLauncher({

@@ -70,26 +70,26 @@ describe("StringUtils", () => {
 
   describe("trimLeft", () => {
     it("should trim undefined in the left side", () => {
-      expect(StringUtils.trimLetf(null)).toEqual(null);
-      expect(StringUtils.trimLetf(undefined)).toEqual(undefined);
+      expect(StringUtils.trimLeft(null)).toEqual(null);
+      expect(StringUtils.trimLeft(undefined)).toEqual(undefined);
     });
     it("should trim space string in the left side: no chars specified", () => {
-      expect(StringUtils.trimLetf(" the apple ")).toEqual("the apple ");
-      expect(StringUtils.trimLetf("    the apple    ")).toEqual(
+      expect(StringUtils.trimLeft(" the apple ")).toEqual("the apple ");
+      expect(StringUtils.trimLeft("    the apple    ")).toEqual(
         "the apple    ",
       );
-      expect(StringUtils.trimLetf("  " + " \n\t  the apple  ")).toEqual(
+      expect(StringUtils.trimLeft("  " + " \n\t  the apple  ")).toEqual(
         "the apple  ",
       );
     });
     it("should trim char string in the left side: chars specified", () => {
-      expect(StringUtils.trimLetf("aa the apple a", "a")).toEqual(
+      expect(StringUtils.trimLeft("aa the apple a", "a")).toEqual(
         " the apple a",
       );
-      expect(StringUtils.trimLetf("aaathe apple a", "a")).toEqual(
+      expect(StringUtils.trimLeft("aaathe apple a", "a")).toEqual(
         "the apple a",
       );
-      expect(StringUtils.trimLetf("aaaa    the apple", "a")).toEqual(
+      expect(StringUtils.trimLeft("aaaa    the apple", "a")).toEqual(
         "    the apple",
       );
     });
@@ -115,6 +115,37 @@ describe("StringUtils", () => {
     expect(StringUtils.concat("the", " ", "green ", "apple")).toEqual(
       "the green apple",
     );
+  });
+
+  describe("Concat many strings", () => {
+    it.each`
+    str1 | str2 | mores | expected
+    ${null} | ${null} | ${[]} | ${''}
+    ${null} | ${undefined} | ${[]} | ${''}
+    ${undefined} | ${undefined} | ${[]} | ${''}
+    ${null} | ${"I"} | ${[' ', "am"]} | ${'I am'}
+    ${undefined} | ${"I"} | ${[' ', 'am', ', You', ' ', 'are']} | ${'I am, You are'}
+    ${'I AM'} | ${', '} | ${['YOU ARE',', ', 'HE/SHE IS']} | ${'I AM, YOU ARE, HE/SHE IS'}
+    `
+    ("concat $str1 with $str2 and $mores should expected $expected", ({ str1, str2, mores, expected })=> {
+      expect(StringUtils.concat(str1, str2, ...mores))
+        .toEqual(expected);
+    })
+    it.each(
+      [
+        [null, null, ''],
+        [null, undefined, ''],
+        [undefined, undefined, ''],
+        [null, "I", ' ', "am", 'I am'],
+        [undefined, 'I',' ', 'am', ', You', ' ', 'are', 'I am, You are'],
+        ['I AM', ', ', 'YOU ARE',', ', 'HE/SHE IS', 'I AM, YOU ARE, HE/SHE IS']
+      ]
+    )('Concatenating %o', (str1: string, str2: string, ...args: string[]) => {
+      const mores = args.splice(0, args.length - 1);
+      const expected = args.at(0);
+      expect(StringUtils.concat(str1, str2, ...mores))
+        .toEqual(expected);
+    })
   });
 
   it("should capitalized string", () => {
