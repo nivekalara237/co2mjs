@@ -120,7 +120,7 @@ export class StringUtils {
 
       sep = sep ?? "";
 
-      list = list.filter(item => item!=null);
+      list = list.filter(item => item!==null && item !== undefined);
 
       return list.join(sep);
   }
