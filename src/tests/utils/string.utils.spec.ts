@@ -189,12 +189,27 @@ describe("StringUtils", () => {
     });
   });
 
-  describe("join", ()=>{
+  describe("joins", ()=>{
       it("should join list elements", ()=>{
-        expect(StringUtils.join(["tomate","oignon","ail","persil"], "*")).toEqual("tomate*oignon*ail*persil");
+        expect(StringUtils.joins(["tomate","oignon","ail","persil"], "*")).toEqual("tomate*oignon*ail*persil");
       });
       it("should return empty string for empty list", () => {
-        expect(StringUtils.join([], "*")).toEqual("");
+        expect(StringUtils.joins([], "*")).toEqual("");
+      });
+      it("should return empty string for null list", () => {
+        expect(StringUtils.joins(null, "*")).toEqual("");
+      });
+      it("should return empty string for undefined list", () => {
+        expect(StringUtils.joins(undefined, "*")).toEqual("");
+      });
+      it("should add default separator for null separator", () => {
+        expect(StringUtils.joins(["je", "suis", undefined, "tu", null, "es"], null)).toEqual("jesuistues");
+      });
+      it("should add default separator for undefined separator", () => {
+        expect(StringUtils.joins(["je", "suis", undefined, "tu", null, "es"], undefined)).toEqual("jesuistues");
+      });
+      it("should return a new list without null or undefined value", () => {
+        expect(StringUtils.joins(["je", "suis", undefined, "tu", null, "es"], "-")).toEqual("je-suis-tu-es");
       });
   });
 });
