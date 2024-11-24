@@ -20,11 +20,29 @@ describe("StringUtils", () => {
   describe("xPAD", () => {
     it("should pad string in the right side", () => {
       expect(StringUtils.rightPad(null)).toEqual(null);
-      expect(StringUtils.rightPad("1", "0", 3)).toEqual("1000");
+      expect(StringUtils.rightPad("1", "0", 3)).toEqual("100");
+      expect(StringUtils.rightPad(null, "0", 3)).toEqual("000");
+      expect(StringUtils.rightPad(undefined, "0", 3)).toEqual("000");
+      expect(StringUtils.rightPad("", "0", 3)).toEqual("000");
+      expect(StringUtils.rightPad("3001", "0", 3)).toEqual("3001");
     });
     it("should pad string in the left side", () => {
       expect(StringUtils.leftPad(null)).toEqual(null);
-      expect(StringUtils.leftPad("1", "0", 3)).toEqual("0001");
+      expect(StringUtils.leftPad("1", "0", 3)).toEqual("001");
+      expect(StringUtils.leftPad("81", "0", 3)).toEqual("081");
+      expect(StringUtils.leftPad("27981", "0", 3)).toEqual("27981");
+    });
+
+    it("should pad string in the left size: null string provided against repeat > 0", () => {
+      expect(StringUtils.leftPad(null, "0", 3)).toEqual("000");
+    });
+
+    it("should pad string in the left size: undefined string provided against repeat > 0", () => {
+      expect(StringUtils.leftPad(undefined, "0", 3)).toEqual("000");
+    });
+
+    it("should pad string in the left size: empty string provided against repeat > 0", () => {
+      expect(StringUtils.leftPad("", "0", 3)).toEqual("000");
     });
   });
 
@@ -49,21 +67,21 @@ describe("StringUtils", () => {
     it("should trim space string in the rigth side: no chars specified", () => {
       expect(StringUtils.trimRight(" the apple ")).toEqual(" the apple");
       expect(StringUtils.trimRight("    the apple    ")).toEqual(
-        "    the apple",
+        "    the apple"
       );
       expect(StringUtils.trimRight("    the apple  \n" + "  ")).toEqual(
-        "    the apple",
+        "    the apple"
       );
     });
     it("should trim char string in the rigth side: chars specified", () => {
       expect(StringUtils.trimRight("aa the apple a", "a")).toEqual(
-        "aa the apple ",
+        "aa the apple "
       );
       expect(StringUtils.trimRight("aaa the appleaaaa", "a")).toEqual(
-        "aaa the apple",
+        "aaa the apple"
       );
       expect(StringUtils.trimRight("    the apple  aaaa", "a")).toEqual(
-        "    the apple  ",
+        "    the apple  "
       );
     });
   });
@@ -76,21 +94,21 @@ describe("StringUtils", () => {
     it("should trim space string in the left side: no chars specified", () => {
       expect(StringUtils.trimLeft(" the apple ")).toEqual("the apple ");
       expect(StringUtils.trimLeft("    the apple    ")).toEqual(
-        "the apple    ",
+        "the apple    "
       );
       expect(StringUtils.trimLeft("  " + " \n\t  the apple  ")).toEqual(
-        "the apple  ",
+        "the apple  "
       );
     });
     it("should trim char string in the left side: chars specified", () => {
       expect(StringUtils.trimLeft("aa the apple a", "a")).toEqual(
-        " the apple a",
+        " the apple a"
       );
       expect(StringUtils.trimLeft("aaathe apple a", "a")).toEqual(
-        "the apple a",
+        "the apple a"
       );
       expect(StringUtils.trimLeft("aaaa    the apple", "a")).toEqual(
-        "    the apple",
+        "    the apple"
       );
     });
   });
@@ -113,39 +131,37 @@ describe("StringUtils", () => {
 
   it("should concat strings", () => {
     expect(StringUtils.concat("the", " ", "green ", "apple")).toEqual(
-      "the green apple",
+      "the green apple"
     );
   });
 
   describe("Concat many strings", () => {
     it.each`
-    str1 | str2 | mores | expected
-    ${null} | ${null} | ${[]} | ${''}
-    ${null} | ${undefined} | ${[]} | ${''}
-    ${undefined} | ${undefined} | ${[]} | ${''}
-    ${null} | ${"I"} | ${[' ', "am"]} | ${'I am'}
-    ${undefined} | ${"I"} | ${[' ', 'am', ', You', ' ', 'are']} | ${'I am, You are'}
-    ${'I AM'} | ${', '} | ${['YOU ARE',', ', 'HE/SHE IS']} | ${'I AM, YOU ARE, HE/SHE IS'}
-    `
-    ("concat $str1 with $str2 and $mores should expected $expected", ({ str1, str2, mores, expected })=> {
-      expect(StringUtils.concat(str1, str2, ...mores))
-        .toEqual(expected);
-    })
-    it.each(
-      [
-        [null, null, ''],
-        [null, undefined, ''],
-        [undefined, undefined, ''],
-        [null, "I", ' ', "am", 'I am'],
-        [undefined, 'I',' ', 'am', ', You', ' ', 'are', 'I am, You are'],
-        ['I AM', ', ', 'YOU ARE',', ', 'HE/SHE IS', 'I AM, YOU ARE, HE/SHE IS']
-      ]
-    )('Concatenating %o', (str1: string, str2: string, ...args: string[]) => {
+      str1         | str2         | mores                               | expected
+      ${null}      | ${null}      | ${[]}                               | ${""}
+      ${null}      | ${undefined} | ${[]}                               | ${""}
+      ${undefined} | ${undefined} | ${[]}                               | ${""}
+      ${null}      | ${"I"}       | ${[" ", "am"]}                      | ${"I am"}
+      ${undefined} | ${"I"}       | ${[" ", "am", ", You", " ", "are"]} | ${"I am, You are"}
+      ${"I AM"}    | ${", "}      | ${["YOU ARE", ", ", "HE/SHE IS"]}   | ${"I AM, YOU ARE, HE/SHE IS"}
+    `(
+      "concat $str1 with $str2 and $mores should expected $expected",
+      ({ str1, str2, mores, expected }) => {
+        expect(StringUtils.concat(str1, str2, ...mores)).toEqual(expected);
+      }
+    );
+    it.each([
+      [null, null, ""],
+      [null, undefined, ""],
+      [undefined, undefined, ""],
+      [null, "I", " ", "am", "I am"],
+      [undefined, "I", " ", "am", ", You", " ", "are", "I am, You are"],
+      ["I AM", ", ", "YOU ARE", ", ", "HE/SHE IS", "I AM, YOU ARE, HE/SHE IS"],
+    ])("Concatenating %o", (str1: string, str2: string, ...args: string[]) => {
       const mores = args.splice(0, args.length - 1);
       const expected = args.at(0);
-      expect(StringUtils.concat(str1, str2, ...mores))
-        .toEqual(expected);
-    })
+      expect(StringUtils.concat(str1, str2, ...mores)).toEqual(expected);
+    });
   });
 
   it("should capitalized string", () => {
@@ -167,7 +183,7 @@ describe("StringUtils", () => {
     });
     it("should stringify a bigint value", () => {
       expect(StringUtils.stringify(9789707070709707708n)).toEqual(
-        "9789707070709707708",
+        "9789707070709707708"
       );
     });
     it("should stringify a float value", () => {
@@ -181,11 +197,30 @@ describe("StringUtils", () => {
     });
     it("should stringify a object value", () => {
       expect(StringUtils.stringify({ name: "apple", weight: 67 })).toEqual(
-        '{"name":"apple","weight":67}',
+        '{"name":"apple","weight":67}'
       );
     });
     it("should stringify a function value", () => {
       expect(StringUtils.stringify(() => 1)).toEqual(undefined);
+    });
+  });
+
+  describe("Size", () => {
+    it("should calculate size of string", () => {
+      expect(StringUtils.size("Hello")).toEqual(5);
+      expect(StringUtils.size("Hello ")).toEqual(6);
+    });
+    it("should calculate size of empty string", () => {
+      expect(StringUtils.size("")).toEqual(0);
+    });
+    it("should calculate size of blank string", () => {
+      expect(StringUtils.size(" ")).toEqual(1);
+    });
+    it("should calculate size of null string", () => {
+      expect(StringUtils.size(null)).toEqual(0);
+    });
+    it("should calculate size of undefined string", () => {
+      expect(StringUtils.size(undefined)).toEqual(0);
     });
   });
 });
