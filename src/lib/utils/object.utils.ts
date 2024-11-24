@@ -10,6 +10,7 @@ export class ObjectUtils {
   };
 
   public static isNotNullAndNotUndefined = <T>(obj: T): boolean => {
+    
     return !this.isNullOrUndefined(obj);
   };
 
