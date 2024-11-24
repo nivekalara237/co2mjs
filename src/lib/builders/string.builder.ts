@@ -2,8 +2,10 @@ import { StringUtils } from "../utils/string.utils";
 import { ObjectUtils } from "../utils/object.utils";
 
 type SupportedType = string | number | boolean;
+
 export class StringBuilder {
   private arr: string[] = [];
+
   constructor(init: string = "") {
     this.arr.push(init);
   }
@@ -42,4 +44,8 @@ export class StringBuilder {
   public toString(): string {
     return this.arr.join("");
   }
+
+  public size = () => this.arr.length;
+
+  public contentSize = () => this.toString().length;
 }
