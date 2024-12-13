@@ -114,12 +114,15 @@ export class NumericUtils {
 
 
   static gcd = (a: number, b: number) : number => {
-    while(b !== 0) {
-      let tmp = b;
-      b = a % b;
-      a = tmp;
+    let max = Math.max(a, b);
+    let min = Math.min(a, b);
+    if(max % min === 0) return min;
+    while(min !== 0) {
+      let tmp = min;
+      min = max % min;
+      max = tmp;
     }
-    return a;
+    return max;
   }
 
 
