@@ -1,10 +1,8 @@
-import { ArrayUtils } from "./array.utils";
 import { ObjectUtils } from "./object.utils";
 import { ThrowableUtils } from "./throwable.utils";
 
-
 /**
- * 
+ *
  * Explication des fonctions :
  * factorial(int n) : Calcule le factoriel d'un nombre entier n.
  * isPrime(int n) : Vérifie si un nombre est premier.
@@ -28,57 +26,62 @@ import { ThrowableUtils } from "./throwable.utils";
  * square(int n) : Calcule le carré d'un nombre.
  * sum(int[] numbers) : Calcule la somme des éléments d'un tableau d'entiers.
  * sort(int[] numbers) : Trie un tableau d'entiers dans l'ordre croissant.
- * 
+ *
  */
 
-
 export class NumericUtils {
-  public static isNumeric = (val: any) => {
-    return !Array.isArray(val) && val - parseFloat(val) + 1 >= 0;
-  };
-
   static statistics = class {
     static average = (nums: number[]): number | undefined => {
-      if(ObjectUtils.isNullOrUndefined(nums) || nums.length === 0) return undefined;
+      if (ObjectUtils.isNullOrUndefined(nums) || nums.length === 0)
+        return undefined;
       let sum = 0;
       let len = 0;
       let isAllInvalid = true;
-      for(let i = 0; i < nums.length; i++) {
-        if(ObjectUtils.isNotNullAndNotUndefined(nums[i])) {
-          sum+=nums[i];
+      for (let i = 0; i < nums.length; i++) {
+        if (ObjectUtils.isNotNullAndNotUndefined(nums[i])) {
+          sum += nums[i];
           len++;
           isAllInvalid = false;
         }
       }
-      return isAllInvalid ? undefined : (sum / (len === 0 ? 1: len));
+      return isAllInvalid ? undefined : sum / (len === 0 ? 1 : len);
     };
 
     static median = (nums: number[]): number | undefined => {
+      if (ObjectUtils.isNullOrUndefined(nums) && nums.length === 0)
+        return undefined;
       return undefined;
-    }
+    };
 
     static variance = (nums: number[]): number | undefined => {
+      if (ObjectUtils.isNullOrUndefined(nums) && nums.length === 0)
+        return undefined;
       return undefined;
-    }
+    };
+  };
+
+  public static isNumeric = (val: any) => {
+    return !Array.isArray(val) && val - parseFloat(val) + 1 >= 0;
   };
 
   static factorial = (num: number): number => {
-    if(num < 0) {
+    if (num < 0) {
       ThrowableUtils.raise("the number must be positive of zero");
     }
-    if(num === 0) return 1;
+    if (num === 0) return 1;
     let result = 1;
-    for(let i = 1; i <= num; i++) {
-      result *=i;
+    for (let i = 1; i <= num; i++) {
+      result *= i;
     }
     return result;
-  }
+  };
 
   static max = (numbers: number[]): number | undefined => {
-    if(ObjectUtils.isNullOrUndefined(numbers) || numbers.length === 0) return undefined;
+    if (ObjectUtils.isNullOrUndefined(numbers) || numbers.length === 0)
+      return undefined;
     let max = numbers[0];
-    for(let i = 1; i < numbers.length; i++) {
-      if(numbers[i] > max) {
+    for (let i = 1; i < numbers.length; i++) {
+      if (numbers[i] > max) {
         max = numbers[i];
       }
     }
@@ -86,52 +89,92 @@ export class NumericUtils {
   };
 
   static min = (numbers: number[]): number | undefined => {
-    if(ObjectUtils.isNullOrUndefined(numbers) || numbers.length === 0) return undefined;
+    if (ObjectUtils.isNullOrUndefined(numbers) || numbers.length === 0)
+      return undefined;
     let min = numbers[0];
-    for(let i = 1; i < numbers.length; i++) {
-      if(numbers[i] < min) {
+    for (let i = 1; i < numbers.length; i++) {
+      if (numbers[i] < min) {
         min = numbers[i];
       }
     }
     return min;
   };
 
-  static isEven = (integer: number) : boolean => integer % 2 === 0;
+  static isEven = (integer: number): boolean => integer % 2 === 0;
 
-  static isOdd = (integer: number) : boolean => !this.isEven(integer);
+  static isOdd = (integer: number): boolean => !this.isEven(integer);
 
   static isPrime = (integer: number): boolean => {
-    if(integer <= 1) return false;
-    for(let i=2; i<= Math.sqrt(integer); i++) {
-      if(integer % i === 0) return false;
+    if (integer <= 1) return false;
+    for (let i = 2; i <= Math.sqrt(integer); i++) {
+      if (integer % i === 0) return false;
     }
     return true;
-  }
+  };
 
   static arePrime = (a: number, b: number): boolean => {
     return this.gcd(a, b) === 1;
   };
 
+  static isNatural = (num: number): boolean => {
+    return (
+      !ObjectUtils.isNullOrUndefined(num) &&
+      (
+        Number.isInteger ||
+        ((value: any) => {
+          return (
+            typeof value === "number" &&
+            !isFinite(value) &&
+            Math.floor(value) === value
+          );
+        })
+      )(num)
+    );
+  };
 
-  static gcd = (a: number, b: number) : number => {
+  static gcd = (a: number, b: number): number => {
+    let validate = (x: number) => this.isNatural(x) && x >= 0;
+    if (!validate(a)) {
+      ThrowableUtils.raise(
+        "The first number must be a natural and positive number"
+      );
+    }
+    if (!validate(b)) {
+      ThrowableUtils.raise(
+        "The second number must be a natural and positive number"
+      );
+    }
+
+    if (a === 0 || b === 0) {
+      if (a === 0 && b === 0) {
+        ThrowableUtils.raise("At least one number must be defined");
+      }
+      return a + b;
+    }
+
     let max = Math.max(a, b);
     let min = Math.min(a, b);
-    if(max % min === 0) return min;
-    while(min !== 0) {
-      let tmp = min;
+    if (max % min === 0) return min;
+    while (min !== 0) {
+      let memo = min;
       min = max % min;
-      max = tmp;
+      max = memo;
     }
     return max;
-  }
-
+  };
 
   static lcm = (a: number, b: number): number => {
+    if (a === 0 || b === 0) {
+      if (a === 0 && b === 0) {
+        ThrowableUtils.raise("At least one number must be defined");
+      }
+      return 0;
+    }
     return (a * b) / this.gcd(a, b);
-  }
+  };
 
   static square = (n: number) => {
-    if(ObjectUtils.isNullOrUndefined(n)) return undefined;
+    if (ObjectUtils.isNullOrUndefined(n)) return undefined;
     return n * n;
   };
 
@@ -140,6 +183,5 @@ export class NumericUtils {
   static round = (value: number, places: number): number => {
     const scale = this.power(10, places);
     return Math.round(value * scale) / scale;
-  }
-
+  };
 }
