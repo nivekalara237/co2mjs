@@ -223,4 +223,84 @@ describe("StringUtils", () => {
       expect(StringUtils.size(undefined)).toEqual(0);
     });
   });
+
+  describe("To LowerCase", () => {
+    it("should convert empty string to lower case", () => {
+      expect(StringUtils.lowerCase("")).toEqual("");
+      expect(StringUtils.lowerCase(null)).toEqual(null);
+      expect(StringUtils.lowerCase(undefined)).toEqual(undefined);
+    });
+
+    it("should convert string to lower case", () => {
+      expect(StringUtils.lowerCase("AbCa23")).toEqual("abca23");
+    });
+  });
+
+  describe("To UpperCase", () => {
+    it("should convert empty string to upper case", () => {
+      expect(StringUtils.upperCase("")).toEqual("");
+      expect(StringUtils.upperCase(null)).toEqual(null);
+      expect(StringUtils.upperCase(undefined)).toEqual(undefined);
+    });
+
+    it("should convert string to upper case", () => {
+      expect(StringUtils.upperCase("AbCa 23")).toEqual("ABCA 23");
+    });
+  });
+
+  describe("is All Lowercase", () => {
+    it("should check if empty string is all lower case", () => {
+      expect(StringUtils.isAllLowerCase("")).toBeTruthy();
+      expect(StringUtils.isAllLowerCase(null)).toBeTruthy();
+      expect(StringUtils.isAllLowerCase(undefined)).toBeTruthy();
+    });
+
+    it("should check if string is not totally lower", () => {
+      expect(StringUtils.isAllLowerCase("abcZ")).toBeFalsy();
+      expect(StringUtils.isAllLowerCase("987987Za")).toBeFalsy();
+    });
+
+    it("should check if string is totally lower", () => {
+      expect(StringUtils.isAllLowerCase("abc")).toBeTruthy();
+      expect(StringUtils.isAllLowerCase("987987za")).toBeTruthy();
+    });
+  });
+
+  describe("is All Alphabetic Lowercase", () => {
+    it("should check if empty string is all alphabetic lower case", () => {
+      expect(StringUtils.isAllAlphabeticLowerCase("")).toBeTruthy();
+      expect(StringUtils.isAllAlphabeticLowerCase(null)).toBeTruthy();
+      expect(StringUtils.isAllAlphabeticLowerCase(undefined)).toBeTruthy();
+    });
+
+    it("should check if string is not totally alphabetic lower", () => {
+      expect(StringUtils.isAllAlphabeticLowerCase("abcZ")).toBeFalsy();
+      expect(StringUtils.isAllAlphabeticLowerCase("abc1")).toBeFalsy();
+      expect(StringUtils.isAllAlphabeticLowerCase("abc efg")).toBeFalsy();
+    });
+
+    it("should check if string is totally alphabetic lower", () => {
+      expect(StringUtils.isAllAlphabeticLowerCase("abc")).toBeTruthy();
+      expect(StringUtils.isAllAlphabeticLowerCase("987987za")).toBeFalsy();
+    });
+  });
+
+  describe("is All Alphabetic Uppercase", () => {
+    it("should check if empty string is all alphabetic upper case", () => {
+      expect(StringUtils.isAllAlphabeticUpperCase("")).toBeTruthy();
+      expect(StringUtils.isAllAlphabeticUpperCase(null)).toBeTruthy();
+      expect(StringUtils.isAllAlphabeticUpperCase(undefined)).toBeTruthy();
+    });
+
+    it("should check if string is not totally alphabetic upper", () => {
+      expect(StringUtils.isAllAlphabeticUpperCase("ABCz")).toBeFalsy();
+      expect(StringUtils.isAllAlphabeticUpperCase("ABC1")).toBeFalsy();
+      expect(StringUtils.isAllAlphabeticUpperCase("ABC EFG")).toBeFalsy();
+    });
+
+    it("should check if string is totally alphabetic upper", () => {
+      expect(StringUtils.isAllAlphabeticUpperCase("ABC")).toBeTruthy();
+      expect(StringUtils.isAllAlphabeticUpperCase("987987ZA")).toBeFalsy();
+    });
+  });
 });

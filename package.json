@@ -36,6 +36,7 @@
     "deleteModules": "rm -rf node_modules",
     "dev": "node ./tasks/dev.js",
     "build": "node ./tasks/build.js",
+    "build:changelog": "github-changes --owner nivekalara237 --repository co2mjs --only-pulls --use-commit-body --date-format '(YYYY-MM-DD)' --file CHANGELOG.md --verbose",
     "@web/test/build": "node ./tasks/browser-test.js",
     "lint": "eslint",
     "build-tests": "tsc --project tsconfig.test.json",
@@ -108,6 +109,7 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.3.0",
     "webpack": "^5.96.1",
-    "playwright": "^1.49.0"
+    "playwright": "^1.49.0",
+    "github-changes": "^2.0.3"
   }
 }

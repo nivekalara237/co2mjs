@@ -2,7 +2,8 @@ import { ObjectUtils } from "./object.utils";
 
 export class StringUtils {
   private static readonly BLANK_SEPARATOR = "";
-
+  private static readonly BLANK: string = " ";
+  private static readonly EMPTY: string = "";
   /**
    * Converts a value to its string representation.
    * - If the value is `null` or `undefined`, returns `null`.
@@ -400,4 +401,35 @@ export class StringUtils {
    */
   static size = (str: string) =>
     ObjectUtils.isNullOrUndefined(str) ? 0 : str.length;
+
+  static lowerCase = (str: string) => {
+    if (this.isEmpty(str)) return str;
+    return str.toLowerCase();
+  };
+
+  static isAllAlphabeticLowerCase = (str: string) => {
+    if (this.isEmpty(str)) return true;
+    const regx = /^[a-z]+$/;
+    return regx.test(str);
+  };
+
+  static isAllAlphabeticUpperCase = (str: string) => {
+    if (this.isEmpty(str)) return true;
+    return /^[A-Z]+$/.test(str);
+  };
+
+  static isAllLowerCase = (str: string) => {
+    if (this.isEmpty(str)) return true;
+    for (let char of str.split(this.EMPTY)) {
+      if (char !== char.toLowerCase()) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  static upperCase = (str: string) => {
+    if (this.isEmpty(str)) return str;
+    return str.toUpperCase();
+  };
 }
