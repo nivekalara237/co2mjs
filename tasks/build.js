@@ -43,6 +43,10 @@ Promise.all([
             from: ["./README.md"],
             to: ["./dist/README.md"],
           },
+          {
+            from: ["./CHANGELOG.md"],
+            to: ["./dist/CHANGELOG.md"],
+          },
         ],
       }),
       writeFilePlugin({
@@ -66,7 +70,8 @@ Promise.all([
     outfile: "./dist/index.min.js",
     platform: "node",
   }),
-]).then()
-  .catch(er => {
-  console.error(er);
-});
+])
+  .then()
+  .catch((er) => {
+    console.error(er);
+  });
