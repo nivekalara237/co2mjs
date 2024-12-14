@@ -1,5 +1,10 @@
 ## Change Log
 
+### upcoming (2024-12-14)
+- [#28](https://github.com/nivekalara237/co2mjs/pull/28) sentitive cases methods (@nivekalara237)
+- [#25](https://github.com/nivekalara237/co2mjs/pull/25) [EVOL] add jsdoc in stringutils methods + add size(), hasLength(), tr… (@nivekalara237)
+- [#27](https://github.com/nivekalara237/co2mjs/pull/27) Feature/number utils  add new methods (@nivekalara237)
+
 ### v1.0.10 (2024-11-24)
 - [#24](https://github.com/nivekalara237/co2mjs/pull/24) update web-test-runner config (@nivekalara237)
 - [#23](https://github.com/nivekalara237/co2mjs/pull/23) [FEATURE] add config for browsers testing and deleting node:crypto de… (@nivekalara237)
