@@ -57,4 +57,16 @@ describe("String Builder", () => {
     expect(builder1.isEmpty()).toBeFalsy();
     expect(builder2.isEmpty()).toBeFalsy();
   });
+
+  it("Shoud get segments size", () => {
+    const builder1 = new StringBuilder("a");
+    const builder2 = builder1.append(" .").prepend(" ").prepend("");
+    expect(builder1.size()).toEqual(4);
+  });
+
+  it("Shoud get content size", () => {
+    const builder1 = new StringBuilder("a");
+    const builder2 = builder1.append(" .").prepend(" ").prepend("!!");
+    expect(builder1.contentSize()).toEqual(6);
+  });
 });
