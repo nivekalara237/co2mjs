@@ -86,7 +86,7 @@ describe("Numeric Utils", () => {
       [2, 4],
       [5, 25],
     ])(
-      "should compute squart of %p. Expecting %p",
+      "should compute squart of %o. Expecting %p",
       (arg, exp: number | undefined) => {
         expect(NumericUtils.square(<number>arg)).toBe(exp);
       }
@@ -107,7 +107,7 @@ describe("Numeric Utils", () => {
       [undefined, false],
       [Infinity, false],
       [-Infinity, false],
-    ])(" the number %p is natural number : %p", (num, exp) => {
+    ])(" the number %o is natural number : %p", (num, exp) => {
       expect(NumericUtils.isNatural(num)).toBe(exp);
     });
   });
@@ -193,7 +193,7 @@ describe("Statistic Utils", () => {
       [[10, 30, 20, 50, 10], 24],
       [[10, 30, 20, null, 50, 10], 24],
       [[10, 30, 20, undefined, 50, 10], 24],
-    ])("Should compute Average of %p and expecting %p", (arr: any, exp) => {
+    ])("Should compute Average of %o and expecting %p", (arr: any, exp) => {
       expect(NumericUtils.statistics.average(arr)).toBe(exp);
     });
   });
