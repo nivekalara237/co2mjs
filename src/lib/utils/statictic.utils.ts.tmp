@@ -1,0 +1,35 @@
+Explication de chaque fonction :
+mean(int[] numbers) : Calcule la moyenne des nombres dans le tableau.
+median(int[] numbers) : Calcule la médiane des nombres dans le tableau.
+variance(int[] numbers) : Calcule la variance des nombres dans le tableau.
+standardDeviation(int[] numbers) : Calcule l'écart-type des nombres dans le tableau.
+sumOfSquaredDifferences(int[] numbers) : Calcule la somme des carrés des différences par rapport à la moyenne.
+coefficientOfVariation(int[] numbers) : Calcule le coefficient de variation, qui est l'écart-type divisé par la moyenne.
+mode(int[] numbers) : Calcule le mode des nombres (les valeurs les plus fréquentes).
+range(int[] numbers) : Calcule le range, qui est la différence entre la valeur maximale et minimale dans le tableau.
+skewness(int[] numbers) : Calcule la skewness (asymétrie), qui mesure l'asymétrie de la distribution des nombres.
+kurtosis(int[] numbers) : Calcule la kurtosis (aplatissement), qui mesure l'aplatissement de la distribution des nombres par rapport à une distribution normale.
+covariance(int[] x, int[] y) : Calcule la covariance entre deux ensembles de nombres.
+pearsonCorrelation(int[] x, int[] y) : Calcule le coefficient de corrélation de Pearson entre deux ensembles de nombres.
+percentile(int[] numbers, double p) : Calcule le percentile p d'un tableau de nombres (par exemple, 90e percentile).
+interquartileRange(int[] numbers) : Calcule l'intervalle interquartile (IQR), c'est-à-dire la différence entre le 75e et 25e percentile.
+normalize(int[] numbers) : Normalise les valeurs d'un tableau de nombres entre 0 et 1 en utilisant la méthode Min-Max scaling.
+giniIndex(int[] numbers) : Calcule l'index de Gini, une mesure d'inégalité dans une distribution de nombres.
+
+
+
+Explication des concepts statistiques :
+
+
+Moyenne : La somme de tous les éléments divisée par le nombre d'éléments.
+Médiane : La valeur qui sépare le tableau trié en deux parties égales.
+Variance : Mesure de la dispersion des éléments par rapport à la moyenne.
+Écart-type : La racine carrée de la variance, utilisée pour mesurer la dispersion.
+Skewness : Mesure de l'asymétrie de la distribution des données.
+Kurtosis : Mesure de l'aplatissement de la distribution des données par rapport à une distribution normale.
+Covariance : Mesure de la relation linéaire entre deux variables.
+Coefficient de corrélation de Pearson : Mesure de la force et de la direction de la relation linéaire entre deux variables.
+Percentile : Un point dans un jeu de données qui sépare les données en fonction d'un pourcentage donné.
+IQR (Interquartile Range) : Différence entre le 75e et 25e percentile, utilisé pour mesurer la dispersion.
+Normalisation Min-Max : Transformation des données pour qu'elles se situent dans un intervalle donné, souvent entre 0 et 1.
+Index de Gini : Mesure d'inégalité dans la distribution des valeurs (utilisé en économie, mais aussi en statistiques).
