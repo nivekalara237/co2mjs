@@ -1,3 +1,4 @@
+import { ArrayUtils } from "./array.utils";
 import { ObjectUtils } from "./object.utils";
 import { ThrowableUtils } from "./throwable.utils";
 
@@ -48,10 +49,50 @@ export class NumericUtils {
     };
 
     static median = (nums: number[]): number | undefined => {
-      if (ObjectUtils.isNullOrUndefined(nums) && nums.length === 0)
+      if (ObjectUtils.isNullOrUndefined(nums) || nums.length === 0)
         return undefined;
-      return undefined;
+
+      const sorted = ArrayUtils.sortInt(nums.filter(v => ObjectUtils.isNotNullAndNotUndefined(v)));
+
+      if(sorted.length === 0) return undefined;
+      
+      const size = sorted.length;
+
+      if(NumericUtils.isOdd(size)) {
+        return sorted[(size-1) / 2];
+      } else {
+        return (sorted[(size/2)-1] + sorted[size/2]) / 2;
+      }
     };
+
+    static mode = (nums: number[]): number | undefined => {
+      if(ObjectUtils.isNullOrUndefined(nums) || nums.length === 0) return undefined;
+      const safety = nums.filter(v => ObjectUtils.isNotNullAndNotUndefined(v));
+      if(safety.length === 0) return undefined;
+
+      const map = new Map<number, number>();
+
+      for(let i = 0; i < safety.length; i++) {
+        const num = safety[i];
+        if(map.has(num)) {
+          const value = map.get(num);
+          map.set(num, (value || 0) + 1);
+        } else {
+          map.set(num, 1);
+        }
+      }
+
+      const mode: {k: number, v: number} = {k: 0, v: -1};
+
+      map.forEach((key, value) => {
+        if(value > mode.v) {
+          mode.k = key;
+          mode.v = value;
+        }
+      })
+
+      return mode.k;
+    }
 
     static variance = (nums: number[]): number | undefined => {
       if (ObjectUtils.isNullOrUndefined(nums) && nums.length === 0)
