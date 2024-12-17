@@ -197,4 +197,36 @@ describe("Statistic Utils", () => {
       expect(NumericUtils.statistics.average(arr)).toBe(exp);
     });
   });
+
+  describe("Median", ()=> {
+    it.each([
+      [null, undefined],
+      [undefined, undefined],
+      [[], undefined],
+      [[null], undefined],
+      [[null, undefined, undefined, null], undefined],
+      [[5,7,10,8,30,2,14,32], 9], // 2,5,7,8,10,14,30,32
+      [[1,7,null,4], 4],
+      [[1,12,5,7,3,9,6], 6],
+      [[1], 1],
+      [[3,7], 5],
+    ])("Should compute de median of %o and expecting %p", (nums, exp) => {
+      expect(NumericUtils.statistics.median(nums)).toBe(exp);
+    })
+  })
+
+  describe("Mode", ()=> {
+    it.each([
+      [null, undefined],
+      [undefined, undefined],
+      [[], undefined],
+      [[null], undefined],
+      [[null, undefined, undefined, null], undefined],
+      [[2,3,2,6,3,8,3], 3],
+      [[1], 1],
+      [[3,7], 3],
+    ])("Should compute de median of %o and expecting %p", (nums, exp) => {
+      expect(NumericUtils.statistics.mode(nums)).toBe(exp);
+    })
+  })
 });
