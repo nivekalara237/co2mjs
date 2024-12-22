@@ -180,6 +180,74 @@ describe("Numeric Utils", () => {
       expect(NumericUtils.isPrime(a)).toBe(exp);
     });
   });
+
+  describe("Number is power of two (2)", () => {
+    it.each([
+      [null, false],
+      [undefined, false],
+      [-2, false],
+      [-1, false],
+      [0, false],
+      [1, true],
+      [2, true],
+      [3, false],
+      [10, false],
+      [16, true],
+    ])("Should check that %o is a power of and expecting %p", (num, exp) => {
+      expect(NumericUtils.isPowerOfTwo(num)).toBe(exp);
+    });
+  });
+
+  describe("Factorial of X", () => {
+    it.each([
+      [null, undefined],
+      [undefined, undefined],
+      [0, 1],
+      [1, 1],
+      [2, 2],
+      [3, 6],
+    ])("Should check that %o ! equal %s", (num, exp) => {
+      expect(NumericUtils.factorial(num)).toBe(exp);
+    });
+
+    it("should throw error when number is under zero", () => {
+      expect(() => NumericUtils.factorial(-1)).toThrow(
+        "The number must be positive of zero"
+      );
+    });
+
+    it("should throw error when number is greater than 170", () => {
+      expect(() => NumericUtils.factorial(171)).toThrow(
+        'Javascript can support number up to 1.7976931348623157e+308, so the "num" can\'t exceed 170.'
+      );
+    });
+  });
+  describe("Number is power of X", () => {
+    it.each([
+      [null, null, false],
+      [undefined, null, false],
+      [undefined, undefined, false],
+      [2, null, false],
+      [2, undefined, false],
+      [2, 0, false],
+      [-1, 2, false],
+      [0, 2, false],
+      [2, 1, true],
+      [16, 2, true],
+      [28, 3, false],
+      [27, 3, true],
+      [5159780352, 12, true],
+      [1628413597910449, 7, true],
+      [1853020188851841, 9, true],
+      [BigInt("100000000000000000000"), 10, true],
+    ])(
+      "Should check that %o is a power of %o and expecting %p",
+      (num, power, exp) => {
+        const d: number = 1853020188851841;
+        expect(NumericUtils.isPowerOf(num, power)).toBe(exp);
+      }
+    );
+  });
 });
 
 describe("Statistic Utils", () => {
@@ -198,35 +266,48 @@ describe("Statistic Utils", () => {
     });
   });
 
-  describe("Median", ()=> {
+  describe("Median", () => {
     it.each([
       [null, undefined],
       [undefined, undefined],
       [[], undefined],
       [[null], undefined],
       [[null, undefined, undefined, null], undefined],
-      [[5,7,10,8,30,2,14,32], 9], // 2,5,7,8,10,14,30,32
-      [[1,7,null,4], 4],
-      [[1,12,5,7,3,9,6], 6],
+      [[5, 7, 10, 8, 30, 2, 14, 32], 9], // 2,5,7,8,10,14,30,32
+      [[1, 7, null, 4], 4],
+      [[1, 12, 5, 7, 3, 9, 6], 6],
       [[1], 1],
-      [[3,7], 5],
+      [[3, 7], 5],
     ])("Should compute de median of %o and expecting %p", (nums, exp) => {
       expect(NumericUtils.statistics.median(nums)).toBe(exp);
-    })
-  })
+    });
+  });
 
-  describe("Mode", ()=> {
+  describe("Mode", () => {
     it.each([
       [null, undefined],
       [undefined, undefined],
       [[], undefined],
       [[null], undefined],
       [[null, undefined, undefined, null], undefined],
-      [[2,3,2,6,3,8,3], 3],
+      [[2, 3, 2, 6, 3, 8, 3], 3],
+      [[1, 2, 3, 4, 5, 8, 23], false],
+      [
+        [1, 2, 3, 4, 5, 3, 8, 1, 23],
+        [1, 3],
+      ],
       [[1], 1],
-      [[3,7], 3],
-    ])("Should compute de median of %o and expecting %p", (nums, exp) => {
-      expect(NumericUtils.statistics.mode(nums)).toBe(exp);
-    })
-  })
+      [[3, 7], false],
+      [[3, 3, 2, 2, 4, 4, 11, 11], false],
+    ])(
+      "Should compute the statistic mode of %o and expecting %p",
+      (nums, exp) => {
+        if (!Array.isArray(exp)) {
+          expect(NumericUtils.statistics.mode(nums)).toBe(exp);
+        } else {
+          expect(NumericUtils.statistics.mode(nums)).toEqual(exp);
+        }
+      }
+    );
+  });
 });
