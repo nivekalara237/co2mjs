@@ -1,6 +1,6 @@
 ## Change Log
 
-### upcoming (2024-12-14)
+### v1.0.11 (2024-12-14)
 - [#28](https://github.com/nivekalara237/co2mjs/pull/28) sentitive cases methods (@nivekalara237)
 - [#25](https://github.com/nivekalara237/co2mjs/pull/25) [EVOL] add jsdoc in stringutils methods + add size(), hasLength(), tr… (@nivekalara237)
 - [#27](https://github.com/nivekalara237/co2mjs/pull/27) Feature/number utils  add new methods (@nivekalara237)
