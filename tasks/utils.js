@@ -17,9 +17,11 @@ export function run(script) {
   });
 }
 
-export function replaceTextInFile(file, find, target) {
+export function replaceTextInFile(file, find, target, all = false) {
   const content = fs.readFileSync(file, "utf-8");
-  const newContent = content.replace(find, target);
+  const newContent = all
+    ? content.replaceAll(find, target)
+    : content.replace(find, target);
   return Promise.all([run(`echo '${newContent}' > ${file}`)]);
 }
 

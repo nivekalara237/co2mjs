@@ -8,6 +8,19 @@ import textReplace from "esbuild-plugin-text-replace";
 Promise.all([
   run("tsc -p tsconfig.build.json"),
   replaceTextInFile("./dist/index.d.ts", '"index"', '"co2m.js"'),
+  replaceTextInFile(
+    "./dist/index.d.ts",
+    '"builders/',
+    '"@co2mjs/builders/',
+    true
+  ),
+  replaceTextInFile("./dist/index.d.ts", '"utils/', '"@co2mjs/utils/', true),
+  replaceTextInFile(
+    "./dist/index.d.ts",
+    '"exceptions/',
+    '"@co2mjs/exceptions/',
+    true
+  ),
   // bundle for esm
   esbuild.build({
     entryPoints: ["src/lib/index.ts"],
