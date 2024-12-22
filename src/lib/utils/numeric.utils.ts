@@ -1,3 +1,4 @@
+import { ArrayUtils } from "./array.utils";
 import { ObjectUtils } from "./object.utils";
 import { ThrowableUtils } from "./throwable.utils";
 
@@ -48,9 +49,79 @@ export class NumericUtils {
     };
 
     static median = (nums: number[]): number | undefined => {
-      if (ObjectUtils.isNullOrUndefined(nums) && nums.length === 0)
+      if (ObjectUtils.isNullOrUndefined(nums) || nums.length === 0)
         return undefined;
-      return undefined;
+
+      const sorted = ArrayUtils.sortInt(
+        nums.filter((v) => ObjectUtils.isNotNullAndNotUndefined(v))
+      );
+
+      if (sorted.length === 0) return undefined;
+
+      const size = sorted.length;
+      if (NumericUtils.isOdd(size)) {
+        return sorted[(size - 1) / 2];
+      } else {
+        return (sorted[size / 2 - 1] + sorted[size / 2]) / 2;
+      }
+    };
+
+    static mode = (nums: number[]): number | number[] | false | undefined => {
+      if (ObjectUtils.isNullOrUndefined(nums) || nums.length === 0)
+        return undefined;
+      const safety = nums.filter((v) =>
+        ObjectUtils.isNotNullAndNotUndefined(v)
+      );
+      if (safety.length === 0) return undefined;
+      if (safety.length === 1) return safety[0];
+
+      const map = new Map<number, number>();
+
+      for (let i = 0; i < safety.length; i++) {
+        const num = safety[i];
+        if (map.has(num)) {
+          const value = map.get(num);
+          map.set(num, (value || 0) + 1);
+        } else {
+          map.set(num, 1);
+        }
+      }
+
+      const mode: { k: number; v: number } = { k: 0, v: -1 };
+      let isSufficientFrequency = false;
+
+      map.forEach((value, key) => {
+        if (value > 1) {
+          isSufficientFrequency = true;
+        }
+        if (value > mode.v) {
+          mode.k = key;
+          mode.v = value;
+        }
+      });
+
+      if (!isSufficientFrequency) {
+        return false;
+      }
+
+      const modes = [];
+      let areTheyHaveSameFrequency = true;
+      let previousFrequency = -1;
+      map.forEach((value, key) => {
+        if (previousFrequency !== -1 && value !== previousFrequency) {
+          areTheyHaveSameFrequency = false;
+        }
+        previousFrequency = value;
+        if (value === mode.v) {
+          modes.push(key);
+        }
+      });
+
+      if (areTheyHaveSameFrequency) {
+        return false;
+      }
+
+      return modes.length === 1 ? mode.k : ArrayUtils.sortInt(modes);
     };
 
     static variance = (nums: number[]): number | undefined => {
@@ -65,8 +136,14 @@ export class NumericUtils {
   };
 
   static factorial = (num: number): number => {
+    if (ObjectUtils.isNullOrUndefined(num)) return undefined;
     if (num < 0) {
-      ThrowableUtils.raise("the number must be positive of zero");
+      ThrowableUtils.raise("The number must be positive of zero");
+    }
+    if (num > 170) {
+      ThrowableUtils.raise(
+        `Javascript can support number up to ${Number.MAX_VALUE}, so the "num" can't exceed 170.`
+      );
     }
     if (num === 0) return 1;
     let result = 1;
@@ -183,5 +260,50 @@ export class NumericUtils {
   static round = (value: number, places: number): number => {
     const scale = this.power(10, places);
     return Math.round(value * scale) / scale;
+  };
+
+  static isPowerOfTwo = (num: number | bigint): boolean => {
+    if (ObjectUtils.isNullOrUndefined(num)) return false;
+    if (num <= 0) return false;
+    if (typeof num === "bigint") {
+      num = Number(num);
+    }
+    return (num & (num - 1)) === 0;
+  };
+
+  static isPowerOf = (num: number | bigint, powerOf: number): boolean => {
+    if (
+      ObjectUtils.isNullOrUndefined(num) ||
+      ObjectUtils.isNullOrUndefined(powerOf)
+    )
+      return false;
+    if (num <= 0 || powerOf <= 0) return false;
+    if (powerOf === 1) return true;
+    if (typeof num === "bigint") {
+      num = Number(num);
+    }
+
+    const n = Math.log10(num) / Math.log10(powerOf);
+
+    if (Math.abs(n - Math.round(n)) > Number.EPSILON) {
+      return false;
+    }
+
+    const p = Math.round(n);
+    const rs = Math.pow(powerOf, p);
+
+    if (rs === num) {
+      return true;
+    }
+
+    let x = num;
+
+    while (x > 1) {
+      if (x % powerOf !== 0) {
+        return false;
+      }
+      x /= powerOf;
+    }
+    return true;
   };
 }
