@@ -6,8 +6,10 @@ type SupportedType = string | number | boolean;
 export class StringBuilder {
   private arr: string[] = [];
 
-  constructor(init: string = "") {
-    this.arr.push(init);
+  constructor(init?: string) {
+    if (init) {
+      this.arr.push(init);
+    }
   }
 
   public append(o: SupportedType): StringBuilder {
@@ -44,6 +46,12 @@ export class StringBuilder {
   public toString(): string {
     return this.arr.join("");
   }
+
+  public build = (separator?: string) => {
+    return this.arr.join(separator ?? "");
+  };
+
+  public segments = () => this.arr;
 
   public size = () => this.arr.length;
 

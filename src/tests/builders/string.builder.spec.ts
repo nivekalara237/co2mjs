@@ -28,6 +28,25 @@ describe("String Builder", () => {
     expect(builder.toString()).toEqual("I have 3 apples? true!");
   });
 
+  it("should build contains separating by *", () => {
+    const builder = new StringBuilder();
+    builder.append("I am").append("You are").append("He/she is");
+    expect(builder.build(";")).toEqual("I am;You are;He/she is");
+  });
+
+  it("should build contains without separator", () => {
+    const builder = new StringBuilder();
+    builder.append("I am").append("You are").append("He/she is");
+    expect(builder.build()).toEqual("I amYou areHe/she is");
+  });
+
+  it("should all segments appended or prepended", () => {
+    const builder = new StringBuilder();
+    builder.append("word").append("!").prepend("Hello");
+
+    expect(builder.segments()).toEqual(["Hello", "word", "!"]);
+  });
+
   it("Reverse the strings appenned", () => {
     const builder = new StringBuilder()
       .append("je")
