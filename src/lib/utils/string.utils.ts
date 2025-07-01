@@ -432,4 +432,15 @@ export class StringUtils {
     if (this.isEmpty(str)) return str;
     return str.toUpperCase();
   };
+
+  public static safeStringify(obj: any, indent?: number): string {
+    const seen = new WeakSet();
+    return JSON.stringify(obj, (_, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) return '[Circular]';
+        seen.add(value);
+      }
+      return value;
+    }, indent);
+  }
 }
