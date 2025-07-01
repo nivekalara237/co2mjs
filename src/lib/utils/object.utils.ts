@@ -1,4 +1,3 @@
-import { coerceBooleanProperty } from "./boolean.utils";
 
 export class ObjectUtils {
   public static getIfNull<T>(value: T, _default: T): T {
@@ -425,6 +424,7 @@ export class ObjectUtils {
    */
   public static mapValues<T extends object, V>(
       obj: T,
+      /* eslint-disable no-unused-vars */
       mapper: (value: T[keyof T], key: keyof T) => V
   ): Record<keyof T, V> {
     return Object.keys(obj).reduce((acc, key) => {
