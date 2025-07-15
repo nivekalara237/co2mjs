@@ -54,7 +54,7 @@ describe("ObjectUtils", () => {
 
     it("should append child to undefined objet", () => {
       expect(
-        ObjectUtils.appendDefined(undefined, "name", "apples"),
+        ObjectUtils.appendDefined(undefined, "name", "apples")
       ).toBeUndefined();
       expect(ObjectUtils.appendDefined(null, "name", "apples")).toBeUndefined();
     });
@@ -76,7 +76,7 @@ describe("ObjectUtils", () => {
     it("should append bigint child to objet", () => {
       const obj = { weight: "apples" };
       expect(
-        ObjectUtils.appendDefined(obj, "area", 70980980980980980898008n),
+        ObjectUtils.appendDefined(obj, "area", 70980980980980980898008n)
       ).toEqual({ ...obj, area: 70980980980980980898008n });
     });
 
@@ -113,7 +113,7 @@ describe("ObjectUtils", () => {
     it("should append object child to objet", () => {
       const obj = { weight: "apples" };
       expect(
-        ObjectUtils.appendDefined(obj, "category", { name: "fruit" }),
+        ObjectUtils.appendDefined(obj, "category", { name: "fruit" })
       ).toEqual({ ...obj, category: { name: "fruit" } });
     });
   });
@@ -296,9 +296,15 @@ describe("ObjectUtils", () => {
     });
 
     it("should compare Map objects correctly", () => {
-      const map1 = new Map([['key1', 'value1'], ['key2', 'value2']]);
-      const map2 = new Map([['key1', 'value1'], ['key2', 'value2']]);
-      const map3 = new Map([['key1', 'value1']]);
+      const map1 = new Map([
+        ["key1", "value1"],
+        ["key2", "value2"],
+      ]);
+      const map2 = new Map([
+        ["key1", "value1"],
+        ["key2", "value2"],
+      ]);
+      const map3 = new Map([["key1", "value1"]]);
       expect(ObjectUtils.isDeepEqual(map1, map2)).toEqual(true);
       expect(ObjectUtils.isDeepEqual(map1, map3)).toEqual(false);
     });
@@ -318,8 +324,6 @@ describe("ObjectUtils", () => {
 
       const obj2: any = { name: "circular" };
       obj2.self = obj2;
-
-      console.log({ obj1 , obj2 });
 
       expect(ObjectUtils.isDeepEqual(obj1, obj2)).toEqual(true);
     });
@@ -345,10 +349,10 @@ describe("ObjectUtils", () => {
 
     // Symbol tests
     it("should handle symbol properties", () => {
-      const sym = Symbol('test');
+      const sym = Symbol("test");
       const obj1 = { [sym]: "value" };
       const obj2 = { [sym]: "value" };
-      const obj3 = { [Symbol('test')]: "value" }; // Different symbol instance
+      const obj3 = { [Symbol("test")]: "value" }; // Different symbol instance
       expect(ObjectUtils.isDeepEqual(obj1, obj2)).toEqual(true);
       expect(ObjectUtils.isDeepEqual(obj1, obj3)).toEqual(false);
     });
@@ -356,6 +360,7 @@ describe("ObjectUtils", () => {
     // Prototype tests
     it("should consider prototype chains", () => {
       class TestClass {}
+
       const obj1 = new TestClass();
       const obj2 = new TestClass();
       const obj3 = {};
@@ -369,21 +374,21 @@ describe("ObjectUtils", () => {
         name: "test",
         items: [1, 2, { key: "value" }],
         date: new Date(2020, 0, 1),
-        map: new Map([['key', 'value']])
+        map: new Map([["key", "value"]]),
       };
 
       const obj2 = {
         name: "test",
         items: [1, 2, { key: "value" }],
         date: new Date(2020, 0, 1),
-        map: new Map([['key', 'value']])
+        map: new Map([["key", "value"]]),
       };
 
       const obj3 = {
         name: "test",
         items: [1, 2, { key: "different" }],
         date: new Date(2020, 0, 1),
-        map: new Map([['key', 'value']])
+        map: new Map([["key", "value"]]),
       };
 
       expect(ObjectUtils.isDeepEqual(obj1, obj2)).toEqual(true);
@@ -401,271 +406,266 @@ describe("ObjectUtils", () => {
     expect(ObjectUtils.isNil(2)).toEqual(false);
   });
 
-  describe('isPlainObject', () => {
-    it('returns true for plain objects', () => {
+  describe("isPlainObject", () => {
+    it("returns true for plain objects", () => {
       expect(ObjectUtils.isPlainObject({})).toBe(true);
     });
 
-    it('returns false for arrays', () => {
+    it("returns false for arrays", () => {
       expect(ObjectUtils.isPlainObject([])).toBe(false);
     });
 
-    it('returns false for null', () => {
+    it("returns false for null", () => {
       expect(ObjectUtils.isPlainObject(null)).toBe(false);
     });
   });
 
-  describe('deepClone', () => {
-    it('clones objects deeply', () => {
+  describe("deepClone", () => {
+    it("clones objects deeply", () => {
       const original = { a: 1, b: { c: 2 } };
       const cloned = ObjectUtils.deepClone(original);
       expect(cloned).toEqual(original);
       expect(cloned).not.toBe(original);
     });
 
-    it('handles circular references', () => {
+    it("handles circular references", () => {
       const obj: any = { a: 1 };
       obj.self = obj;
       const cloned = ObjectUtils.deepClone(obj);
       expect(cloned.self).toBe(cloned);
     });
 
-    it('clones primitive values', () => {
+    it("clones primitive values", () => {
       expect(ObjectUtils.deepClone(42)).toBe(42);
-      expect(ObjectUtils.deepClone('test')).toBe('test');
+      expect(ObjectUtils.deepClone("test")).toBe("test");
       expect(ObjectUtils.deepClone(null)).toBe(null);
     });
 
-    it('clones Date objects', () => {
+    it("clones Date objects", () => {
       const date = new Date();
       const cloned = ObjectUtils.deepClone(date);
       expect(cloned).toEqual(date);
       expect(cloned).not.toBe(date);
     });
 
-    it('should clone Date objects', () => {
+    it("should clone Date objects", () => {
       const date = new Date();
       const cloned = ObjectUtils.deepClone(date);
       expect(cloned).toEqual(date);
       expect(cloned).not.toBe(date);
     });
 
-    it('should clone RegExp objects', () => {
+    it("should clone RegExp objects", () => {
       const regex = /test/i;
       const cloned = ObjectUtils.deepClone(regex);
       expect(cloned.toString()).toBe(regex.toString());
       expect(cloned).not.toBe(regex);
     });
 
-    it('should clone primitive values', () => {
+    it("should clone primitive values", () => {
       expect(ObjectUtils.deepClone(123)).toBe(123);
-      expect(ObjectUtils.deepClone('test')).toBe('test');
+      expect(ObjectUtils.deepClone("test")).toBe("test");
     });
 
-    it('clones nested objects', () => {
+    it("clones nested objects", () => {
       const original = { a: 1, b: { c: 2 } };
       const cloned = ObjectUtils.deepClone(original);
       expect(cloned).toEqual(original);
       expect(cloned.b).not.toBe(original.b);
     });
 
-    it('handles arrays', () => {
+    it("handles arrays", () => {
       const arr = [1, { a: 2 }];
       const cloned = ObjectUtils.deepClone(arr);
       expect(cloned).toEqual(arr);
       expect(cloned[1]).not.toBe(arr[1]);
     });
 
-    it('merges shallow properties', () => {
-      const result = ObjectUtils.mergeDeep(
-          { a: 1 },
-          { b: 2 }
-      );
+    it("merges shallow properties", () => {
+      const result = ObjectUtils.mergeDeep({ a: 1 }, { b: 2 });
       expect(result).toEqual({ a: 1, b: 2 });
     });
 
-    it('deep merges nested objects', () => {
+    it("deep merges nested objects", () => {
       const result = ObjectUtils.mergeDeep(
-          { a: 1, b: { c: 2 } },
-          { b: { d: 3 }, e: 4 }
+        { a: 1, b: { c: 2 } },
+        { b: { d: 3 }, e: 4 }
       );
       expect(result).toEqual({ a: 1, b: { c: 2, d: 3 }, e: 4 });
     });
 
-    it('overwrites primitive values', () => {
+    it("overwrites primitive values", () => {
       const result = ObjectUtils.mergeDeep(
-          { a: 1, b: 'original' },
-          { b: 'new', c: 3 }
+        { a: 1, b: "original" },
+        { b: "new", c: 3 }
       );
-      expect(result).toEqual({ a: 1, b: 'new', c: 3 });
+      expect(result).toEqual({ a: 1, b: "new", c: 3 });
     });
 
-    it('handles null/undefined values', () => {
+    it("handles null/undefined values", () => {
       const result = ObjectUtils.mergeDeep(
-          { a: 1, b: null },
-          { b: undefined, c: 3 }
+        { a: 1, b: null },
+        { b: undefined, c: 3 }
       );
       expect(result).toEqual({ a: 1, b: null, c: 3 });
     });
   });
 
-  describe('pick', () => {
-    it('returns object with picked properties', () => {
+  describe("pick", () => {
+    it("returns object with picked properties", () => {
       const obj = { a: 1, b: 2, c: 3 };
-      expect(ObjectUtils.pick(obj, ['a', 'c'])).toEqual({ a: 1, c: 3 });
+      expect(ObjectUtils.pick(obj, ["a", "c"])).toEqual({ a: 1, c: 3 });
     });
 
-    it('returns empty object for no keys', () => {
+    it("returns empty object for no keys", () => {
       expect(ObjectUtils.pick({ a: 1 }, [])).toEqual({});
     });
   });
 
-
-  describe('getPropertyByPath', () => {
+  describe("getPropertyByPath", () => {
     const testObj = {
       a: {
         b: {
           c: 123,
-          arr: [{ id: 1 }, { id: 2 }]
-        }
-      }
+          arr: [{ id: 1 }, { id: 2 }],
+        },
+      },
     };
 
-    it('should return nested value', () => {
-      expect(ObjectUtils.getPropertyByPath(testObj, 'a.b.c')).toBe(123);
+    it("should return nested value", () => {
+      expect(ObjectUtils.getPropertyByPath(testObj, "a.b.c")).toBe(123);
     });
 
-    it('should return undefined for invalid path', () => {
-      expect(ObjectUtils.getPropertyByPath(testObj, 'a.x.y')).toBeUndefined();
+    it("should return undefined for invalid path", () => {
+      expect(ObjectUtils.getPropertyByPath(testObj, "a.x.y")).toBeUndefined();
     });
 
-    it('should handle array indices', () => {
-      expect(ObjectUtils.getPropertyByPath(testObj, 'a.b.arr.0.id')).toBe(1);
+    it("should handle array indices", () => {
+      expect(ObjectUtils.getPropertyByPath(testObj, "a.b.arr.0.id")).toBe(1);
     });
   });
-  describe('omit', () => {
+  describe("omit", () => {
     const testObj = { a: 1, b: 2, c: 3 };
 
-    it('should exclude specified keys', () => {
-      expect(ObjectUtils.omit(testObj, ['b'])).toEqual({ a: 1, c: 3 });
+    it("should exclude specified keys", () => {
+      expect(ObjectUtils.omit(testObj, ["b"])).toEqual({ a: 1, c: 3 });
     });
 
-    it('should return original object when no keys specified', () => {
+    it("should return original object when no keys specified", () => {
       expect(ObjectUtils.omit(testObj, [])).toEqual(testObj);
     });
 
-    it('should handle non-existent keys', () => {
-      expect(ObjectUtils.omit(testObj, ['x' as keyof typeof testObj])).toEqual(testObj);
+    it("should handle non-existent keys", () => {
+      expect(ObjectUtils.omit(testObj, ["x" as keyof typeof testObj])).toEqual(
+        testObj
+      );
     });
   });
-  describe('tryParseJSON', () => {
-    it('should parse valid JSON', () => {
+  describe("tryParseJSON", () => {
+    it("should parse valid JSON", () => {
       expect(ObjectUtils.tryParseJSON('{"a":1}')).toEqual({ a: 1 });
     });
 
-    it('should return string for invalid JSON', () => {
-      expect(ObjectUtils.tryParseJSON('invalid')).toBe('invalid');
+    it("should return string for invalid JSON", () => {
+      expect(ObjectUtils.tryParseJSON("invalid")).toBe("invalid");
     });
 
-    it('should handle empty string', () => {
-      expect(ObjectUtils.tryParseJSON('')).toBe('');
+    it("should handle empty string", () => {
+      expect(ObjectUtils.tryParseJSON("")).toBe("");
     });
   });
-  describe('isPrimitive', () => {
-    it('should return true for primitives', () => {
+  describe("isPrimitive", () => {
+    it("should return true for primitives", () => {
       expect(ObjectUtils.isPrimitive(123)).toBe(true);
-      expect(ObjectUtils.isPrimitive('test')).toBe(true);
+      expect(ObjectUtils.isPrimitive("test")).toBe(true);
       expect(ObjectUtils.isPrimitive(true)).toBe(true);
       expect(ObjectUtils.isPrimitive(null)).toBe(true);
     });
 
-    it('should return false for objects', () => {
+    it("should return false for objects", () => {
       expect(ObjectUtils.isPrimitive({})).toBe(false);
       expect(ObjectUtils.isPrimitive([])).toBe(false);
       expect(ObjectUtils.isPrimitive(() => {})).toBe(false);
     });
   });
 
-  describe('ObjectUtils Advanced Functions', () => {
-    describe('mapValues', () => {
-      it('transforms object values', () => {
-        const result = ObjectUtils.mapValues(
-            { a: 1, b: 2 },
-            (v) => v * 2
-        );
+  describe("ObjectUtils Advanced Functions", () => {
+    describe("mapValues", () => {
+      it("transforms object values", () => {
+        const result = ObjectUtils.mapValues({ a: 1, b: 2 }, (v) => v * 2);
         expect(result).toEqual({ a: 2, b: 4 });
       });
 
-      it('preserves keys', () => {
-        const result = ObjectUtils.mapValues(
-            { a: 1, b: 2 },
-            (_, k) => k
-        );
-        expect(result).toEqual({ a: 'a', b: 'b' });
+      it("preserves keys", () => {
+        const result = ObjectUtils.mapValues({ a: 1, b: 2 }, (_, k) => k);
+        expect(result).toEqual({ a: "a", b: "b" });
       });
     });
 
-    describe('filterValues', () => {
-      it('filters object properties', () => {
+    describe("filterValues", () => {
+      it("filters object properties", () => {
         const result = ObjectUtils.filterValues(
-            { a: 1, b: 2, c: 3 },
-            (v) => v > 1
+          { a: 1, b: 2, c: 3 },
+          (v) => v > 1
         );
         expect(result).toEqual({ b: 2, c: 3 });
       });
     });
 
-    describe('shallowEqual', () => {
-      it('compares primitives', () => {
+    describe("shallowEqual", () => {
+      it("compares primitives", () => {
         expect(ObjectUtils.shallowEqual(1, 1)).toBe(true);
-        expect(ObjectUtils.shallowEqual(1, '1')).toBe(false);
+        expect(ObjectUtils.shallowEqual(1, "1")).toBe(false);
       });
 
-      it('compares object references', () => {
+      it("compares object references", () => {
         const obj = {};
         expect(ObjectUtils.shallowEqual(obj, obj)).toBe(true);
         expect(ObjectUtils.shallowEqual(obj, obj, true)).toBe(true);
-        expect(ObjectUtils.shallowEqual({a:2}, {})).toBe(false);
-        expect(ObjectUtils.shallowEqual({a:2}, {a:2})).toBe(true);
+        expect(ObjectUtils.shallowEqual({ a: 2 }, {})).toBe(false);
+        expect(ObjectUtils.shallowEqual({ a: 2 }, { a: 2 })).toBe(true);
       });
     });
 
-    describe('diffObjects', () => {
-      it('returns differing properties', () => {
-        const diff = ObjectUtils.diffObjects(
-            { a: 1, b: 2 },
-            { a: 1, b: 3 }
-        );
+    describe("diffObjects", () => {
+      it("returns differing properties", () => {
+        const diff = ObjectUtils.diffObjects({ a: 1, b: 2 }, { a: 1, b: 3 });
         expect(diff).toEqual({ b: 3 });
       });
     });
 
-    describe('createImmutableProxy', () => {
-      it('prevents modifications', () => {
+    describe("createImmutableProxy", () => {
+      it("prevents modifications", () => {
         const immutable = ObjectUtils.createImmutableProxy({ a: 1 });
-        expect(() => { immutable.a = 2 }).toThrow();
+        expect(() => {
+          immutable.a = 2;
+        }).toThrow();
       });
-      it('prevents delections', () => {
+      it("prevents delections", () => {
         const immutable = ObjectUtils.createImmutableProxy({ a: 1 });
-        expect(() => { delete immutable.a }).toThrow();
+        expect(() => {
+          delete immutable.a;
+        }).toThrow();
       });
 
-      it('protects nested objects', () => {
+      it("protects nested objects", () => {
         const immutable = ObjectUtils.createImmutableProxy({ a: { b: 1 } });
-        expect(() => { immutable.a.b = 2 }).toThrow();
+        expect(() => {
+          immutable.a.b = 2;
+        }).toThrow();
       });
     });
 
-    describe('flattenObject', () => {
-      it('flattens nested structures', () => {
+    describe("flattenObject", () => {
+      it("flattens nested structures", () => {
         const result = ObjectUtils.flattenObject({
           a: 1,
-          b: { c: 2, d: { e: 3 } }
+          b: { c: 2, d: { e: 3 } },
         });
         expect(result).toEqual({
-          'a': 1,
-          'b.c': 2,
-          'b.d.e': 3
+          a: 1,
+          "b.c": 2,
+          "b.d.e": 3,
         });
       });
     });

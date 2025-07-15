@@ -92,6 +92,7 @@
     "esbuild-plugin-write-file": "^0.0.4",
     "eslint": "^9.9.1",
     "expect": "^29.7.0",
+    "github-changes": "^2.0.3",
     "globals": "^15.9.0",
     "husky": "^9.1.5",
     "import-sort-cli": "^6.0.0",
@@ -104,12 +105,11 @@
     "lint-staged": "^15.2.9",
     "node-notifier": "^10.0.1",
     "npm-commands": "^1.2.1",
+    "playwright": "^1.49.0",
     "prettier": "^3.3.3",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.3.0",
-    "webpack": "^5.96.1",
-    "playwright": "^1.49.0",
-    "github-changes": "^2.0.3"
+    "webpack": "^5.96.1"
   }
 }

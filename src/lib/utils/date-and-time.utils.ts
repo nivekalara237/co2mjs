@@ -28,14 +28,29 @@ export class DateAndTimeUtils {
    * formatDate(new Date(), 'HH:mm:ss') => "14:30:15"
    */
   public static formatDate(date: Date, pattern: string): string {
+    if (isNaN(date.getTime())) return '';
+
     const pad = (num: number) => num.toString().padStart(2, '0');
-    return pattern
-        .replace(/yyyy/g, date.getFullYear().toString())
-        .replace(/MM/g, pad(date.getMonth() + 1))
-        .replace(/dd/g, pad(date.getDate()))
-        .replace(/HH/g, pad(date.getHours()))
-        .replace(/mm/g, pad(date.getMinutes()))
-        .replace(/ss/g, pad(date.getSeconds()));
+
+    const replacements: Record<string, string> = {
+      'yyyy': date.getFullYear().toString(),
+      'yy': date.getFullYear().toString().slice(-2),
+      'MM': pad(date.getMonth() + 1),
+      'M': (date.getMonth() + 1).toString(),
+      'dd': pad(date.getDate()),
+      'd': date.getDate().toString(),
+      'HH': pad(date.getHours()),
+      'H': date.getHours().toString(),
+      'mm': pad(date.getMinutes()),
+      'm': date.getMinutes().toString(),
+      'ss': pad(date.getSeconds()),
+      's': date.getSeconds().toString()
+    };
+
+    return pattern.replace(
+        /yyyy|yy|MM|M|dd|d|HH|H|mm|m|ss|s/g,
+        match => replacements[match]
+    );
   }
 
   /**
@@ -80,7 +95,7 @@ export class DateAndTimeUtils {
   /**
    * Convertit une durée en millisecondes vers un format lisible
    * @example
-   * formatDuration(3672000) => "1h 1min 12s"
+   * formatDuration(3672000) → "1h 1min 12s"
    */
   public static formatDuration(ms: number): string {
     const seconds = Math.floor(ms / 1000) % 60;
@@ -144,7 +159,7 @@ export class DateAndTimeUtils {
 
   /**
    * Convertit les heures en millisecondes
-   * @example hoursToMs(2) => 7200000
+   * @example hoursToMs(2) → 7200000
    */
   public static hoursToMs(hours: number): number {
     return hours * 60 * 60 * 1000;
@@ -156,12 +171,12 @@ export class DateAndTimeUtils {
    */
   public static timeStringToMs(timeStr: string): number {
     const [h, m, s] = timeStr.split(':').map(Number);
-    return this.hoursToMs(h) + (m * 60000) + (s * 1000);
+    return DateAndTimeUtils.hoursToMs(h) + (m * 60 * 1000) + ((s||0) * 1000);
   }
 
   /**
    * Formate des millisecondes en "HH:MM:SS"
-   * @example msToTimeString(3661000) => "01:01:01"
+   * @example msToTimeString(3661000) -> "01:01:01"
    */
   public static msToTimeString(ms: number): string {
     const totalSecs = Math.floor(ms / 1000);
@@ -176,7 +191,7 @@ export class DateAndTimeUtils {
 
   /**
    * Ajoute un temps spécifié à une heure existante
-   * @example addTime('09:00', '02:30') => '11:30'
+   * @example addTime('09:00', '02:30') → '11:30'
    */
   public static addTime(startTime: string, duration: string): string {
     const startMs = this.timeStringToMs(startTime);
@@ -196,7 +211,7 @@ export class DateAndTimeUtils {
 
   /**
    * Vérifie si une heure est dans une plage horaire
-   * @example isTimeBetween('12:30', '09:00', '17:00') => true
+   * @example isTimeBetween('12:30', '09:00', '17:00') → true
    */
   public static isTimeBetween(
       time: string,
@@ -213,7 +228,7 @@ export class DateAndTimeUtils {
 
   /**
    * Arrondit une heure au quart d'heure le plus proche
-   * @example roundToNearestQuarter('08:07') => '08:00'
+   * @example roundToNearestQuarter('08:07') → '08:00'
    */
   public static roundToNearestQuarter(timeStr: string): string {
     const [h, m] = timeStr.split(':').map(Number);
@@ -228,28 +243,139 @@ export class DateAndTimeUtils {
 
   /**
    * Calcule le temps écoulé depuis une date/heure
-   * @example timeSince(new Date()) => 'à l'instant'
+   * @example timeSince(new Date()) → 'just now'
    */
   public static timeSince(date: Date, now = new Date()): string {
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
     const intervals = {
-      'année': 31536000,
-      mois: 2592000,
-      semaine: 604800,
-      jour: 86400,
-      heure: 3600,
+      year: 31536000,
+      month: 2592000,
+      week: 604800,
+      day: 86400,
+      hour: 3600,
       minute: 60,
-      seconde: 1
+      second: 1
     };
 
     for (const [unit, secondsInUnit] of Object.entries(intervals)) {
       const interval = Math.floor(seconds / secondsInUnit);
       if (interval >= 1) {
-        return `il y a ${interval} ${unit}${interval > 1 ? 's' : ''}`;
+        return `since ${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
       }
     }
 
-    return 'à l\'instant';
+    return 'just now';
+  }
+
+
+  /**
+   * Vérifie si une chaîne est au format horaire valide (HH:MM ou HH:MM:SS)
+   * @example
+   * isValidTime('12:34') => true
+   * isValidTime('25:00') => false
+   */
+  public static isValidTime(timeStr: string): boolean {
+    if (!timeStr || typeof timeStr !== 'string') return false;
+
+    // Supporte HH:MM et HH:MM:SS
+    const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
+    return timeRegex.test(timeStr);
+  }
+
+  /**
+   * Vérifie si une plage horaire est valide
+   * @example
+   * isValidTimeRange('09:00', '17:00') => true
+   * isValidTimeRange('invalid', '17:00') => false
+   */
+  public static isValidTimeRange(startTime: string, endTime: string): boolean {
+    return this.isValidTime(startTime) && this.isValidTime(endTime);
+  }
+
+  /**
+   * Crée une Date UTC à partir des composants
+   * @example createUTCDate(2023, 5, 15) → Date représentant le 15 juin 2023 00:00:00 UTC
+   */
+  public static createUTCDate(
+      year: number,
+      month: number, // 0-11
+      day: number,
+      hours = 0,
+      minutes = 0,
+      seconds = 0,
+      ms = 0
+  ): Date {
+    return new Date(Date.UTC(year, month, day, hours, minutes, seconds, ms));
+  }
+
+  /**
+   * Convertit une date locale en date UTC équivalente
+   * @example localToUTC(new Date()) → Date en UTC
+   */
+  public static localToUTC(date: Date): Date {
+    return new Date(
+        Date.UTC(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds(),
+            date.getMilliseconds()
+        )
+    );
+  }
+
+  /**
+   * Formate une date UTC en string ISO sans timezone
+   * @example formatUTCDate(new Date()) => "2023-06-15T14:30:00"
+   */
+  public static formatUTCDate(date: Date): string {
+    return date.toISOString().replace(/\.\d{3}Z$/, '');
+  }
+
+  /**
+   * Récupère les composants d'une date en UTC
+   */
+  public static getUTCDateComponents(date: Date): {
+    year: number;
+    month: number;
+    day: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } {
+    return {
+      year: date.getUTCFullYear(),
+      month: date.getUTCMonth(),
+      day: date.getUTCDate(),
+      hours: date.getUTCHours(),
+      minutes: date.getUTCMinutes(),
+      seconds: date.getUTCSeconds()
+    };
+  }
+
+  /**
+   * Ajoute une durée à une date UTC
+   */
+  public static addUTCInterval(
+      date: Date,
+      duration: { years?: number; days?: number; hours?: number; minutes?: number }
+  ): Date {
+    const result = new Date(date);
+    if (duration.years) {
+      result.setUTCFullYear(result.getUTCFullYear() + duration.years);
+    }
+    if (duration.days) {
+      result.setUTCDate(result.getUTCDate() + duration.days);
+    }
+    if (duration.hours) {
+      result.setUTCHours(result.getUTCHours() + duration.hours);
+    }
+    if (duration.minutes) {
+      result.setUTCMinutes(result.getUTCMinutes() + duration.minutes);
+    }
+    return result;
   }
 }
