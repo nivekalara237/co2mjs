@@ -76,7 +76,9 @@ describe("ObjectUtils", () => {
     it("should append bigint child to objet", () => {
       const obj = { weight: "apples" };
       expect(
+        // @ts-ignore
         ObjectUtils.appendDefined(obj, "area", 70980980980980980898008n)
+        // @ts-ignore
       ).toEqual({ ...obj, area: 70980980980980980898008n });
     });
 
@@ -170,6 +172,7 @@ describe("ObjectUtils", () => {
   it("should compute the size of boolean,bigint,number,etc", () => {
     expect(ObjectUtils.size(true)).toEqual(0);
     expect(ObjectUtils.size(2)).toEqual(0);
+    // @ts-ignore
     expect(ObjectUtils.size(2n)).toEqual(0);
     expect(ObjectUtils.size(2.9)).toEqual(0);
     expect(ObjectUtils.size(() => {})).toEqual(0);

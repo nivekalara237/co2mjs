@@ -182,6 +182,7 @@ describe("StringUtils", () => {
       expect(StringUtils.stringify(-12)).toEqual("-12");
     });
     it("should stringify a bigint value", () => {
+      // @ts-ignore
       expect(StringUtils.stringify(9789707070709707708n)).toEqual(
         "9789707070709707708"
       );
